@@ -1,0 +1,40 @@
+name:                aoc
+version:             0.20.20.0
+github:              "ajuvercr/aoc_2020"
+license:             BSD3
+author:              "Arthur Vercruysse"
+maintainer:          "arthur.vercruysse@outlook.com"
+copyright:           "2020 Arthur Vercruysse"
+
+extra-source-files:
+- README.md
+
+description:         Please see the README on GitHub at <https://github.com/ajuvercr/aoc_2020#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: src
+
+executables:
+  aoc-01-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc
+
+tests:
+  aoc-01-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - aoc
