@@ -33,7 +33,7 @@ safeTail []     = []
 parse :: [String] -> IO (Int, String)
 parse args = do
     day <- parseDay $ safeHead args
-    c <- readfile day $ safeHead $ safeTail args
+    c <- readfile day $ safeHead . safeTail $ args
     return (day, c)
 
 
@@ -55,7 +55,7 @@ readfile day Nothing = openFile (dayFileLocation day) ReadMode >>= hGetContents
 
 
 main :: IO ()
-main = getArgs >>=  parse >>= uncurry solve
+main = getArgs >>= parse >>= uncurry solve
 
 
 solve :: Int -> String -> IO ()

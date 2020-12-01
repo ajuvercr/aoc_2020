@@ -1,6 +1,7 @@
 module Lib
-    ( someFunc
+    ( printArray
     ) where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+
+printArray :: Show a => [a] -> IO ()
+printArray = foldMap print
