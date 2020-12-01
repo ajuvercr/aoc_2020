@@ -57,6 +57,5 @@ readfile day Nothing = openFile (dayFileLocation day) ReadMode >>= hGetContents
 main :: IO ()
 main = getArgs >>= parse >>= uncurry solve
 
-
 solve :: Int -> String -> IO ()
 solve 1 = Day01.solve

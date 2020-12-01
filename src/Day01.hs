@@ -4,7 +4,6 @@ module Day01
 
 import Data.List
 import Control.Applicative
-import Control.Parallel.Strategies
 
 parseinput :: String -> [Int]
 parseinput content = map read $ lines content
