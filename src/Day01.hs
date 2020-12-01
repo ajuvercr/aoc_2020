@@ -1,7 +1,6 @@
 module Day01
     ( solve
     ) where
-import System.IO
 import Data.List
 import Control.Applicative
 
@@ -32,4 +31,4 @@ solve x = do
     print $ solve1 2020 sorted revSorted
 
     putStr "Part 2: "
-    print $ firstJust (\target -> (* target) <$> solve1 (2020 - target) sorted revSorted) input
+    print $ firstJust (\target -> (* target) <$> solve1 (2020 - target) sorted revSorted) sorted

@@ -1,7 +1,5 @@
 module Main where
 
-import Control.Monad
-import Control.Applicative
 import System.IO
 import System.Environment
 
@@ -17,22 +15,43 @@ thdOf3 (_, _, x) = x
 date :: IO (Integer,Int,Int) -- :: (year,month,day)
 date = toGregorian . utctDay <$> getCurrentTime
 
+
 dayofmonth :: IO Int
 dayofmonth = thdOf3 <$> date
 
 
+safeHead :: [a] -> Maybe a
+safeHead (x:_) = Just x
+safeHead _     = Nothing
+
+
+safeTail :: [a] -> [a]
+safeTail (_:xs) = xs
+safeTail []     = []
+
+
 parse :: [String] -> IO (Int, String)
-parse (location:xs) = liftM2 (,) (parseDay xs) (readfile location)
-parse [] = liftM2 (,) dayofmonth getContents
+parse args = do
+    day <- parseDay $ safeHead args
+    c <- readfile day $ safeHead $ safeTail args
+    return (day, c)
 
 
-parseDay :: [String] -> IO Int
-parseDay [x] = return $ read x
-parseDay _ = dayofmonth
+parseDay :: Maybe String -> IO Int
+parseDay (Just x) = return $ read x
+parseDay Nothing = dayofmonth
 
 
-readfile :: String -> IO String
-readfile location = openFile location ReadMode >>= hGetContents
+dayFileLocation :: Int -> String
+dayFileLocation day
+    | day < 10 = "res/0" ++ show day ++ ".txt"
+    | otherwise = "res/" ++ show day ++ ".txt"
+
+
+readfile :: Int -> Maybe String -> IO String
+readfile _ (Just "--") = getContents
+readfile _ (Just x) = openFile x ReadMode >>= hGetContents
+readfile day Nothing = openFile (dayFileLocation day) ReadMode >>= hGetContents
 
 
 main :: IO ()
