@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 466e51dc692ffe4c2d5c1ae1a49ca020426669fea060203a1fca903624c4cb3e
+-- hash: 9a75ca8ec385516027fca86e2fca5d98eace2f156ee862f7bdd4600cbb1de007
 
 name:           aoc
 version:        0.20.20.0
@@ -19,6 +19,7 @@ license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
     README.md
+    res/01.txt
 
 source-repository head
   type: git
@@ -34,9 +35,10 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , time
   default-language: Haskell2010
 
-executable aoc-01-exe
+executable aoc-exe
   main-is: Main.hs
   other-modules:
       Paths_aoc
@@ -46,9 +48,10 @@ executable aoc-01-exe
   build-depends:
       aoc
     , base >=4.7 && <5
+    , time
   default-language: Haskell2010
 
-test-suite aoc-01-test
+test-suite aoc-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
@@ -59,4 +62,5 @@ test-suite aoc-01-test
   build-depends:
       aoc
     , base >=4.7 && <5
+    , time
   default-language: Haskell2010

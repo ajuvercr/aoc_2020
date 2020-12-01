@@ -8,17 +8,19 @@ copyright:           "2020 Arthur Vercruysse"
 
 extra-source-files:
 - README.md
+- res/*
 
 description:         Please see the README on GitHub at <https://github.com/ajuvercr/aoc_2020#readme>
 
 dependencies:
 - base >= 4.7 && < 5
+- time
 
 library:
   source-dirs: src
 
 executables:
-  aoc-01-exe:
+  aoc-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -29,7 +31,7 @@ executables:
     - aoc
 
 tests:
-  aoc-01-test:
+  aoc-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
