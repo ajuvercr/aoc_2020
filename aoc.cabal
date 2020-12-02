@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9c5c73f229f40e6eae8dd206e32dd842b7a3c602a077053826fa7436589d7282
+-- hash: 450527dc6f6b58e837a3c2207e3df6e008b000b1cbb904141204aefa5117432d
 
 name:           aoc
 version:        0.20.20.0
@@ -20,6 +20,7 @@ build-type:     Simple
 extra-source-files:
     README.md
     res/01.txt
+    res/02.txt
 
 source-repository head
   type: git
@@ -28,6 +29,7 @@ source-repository head
 library
   exposed-modules:
       Day01
+      Day02
       Lib
   other-modules:
       Paths_aoc

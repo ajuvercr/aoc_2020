@@ -7,6 +7,7 @@ import Data.Time.Clock
 import Data.Time.Calendar
 
 import qualified Day01
+import qualified Day02
 
 thdOf3 :: (a, b, c) -> c
 thdOf3 (_, _, x) = x
@@ -59,3 +60,4 @@ main = getArgs >>= parse >>= uncurry solve
 
 solve :: Int -> String -> IO ()
 solve 1 = Day01.solve
+solve 2 = Day02.solve
