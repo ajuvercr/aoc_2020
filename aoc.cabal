@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 450527dc6f6b58e837a3c2207e3df6e008b000b1cbb904141204aefa5117432d
+-- hash: be6273054d406d4717ecf26f3c2a0c6268e6df0d8630ed343129f8dd8e91885e
 
 name:           aoc
 version:        0.20.20.0
@@ -31,6 +31,7 @@ library
       Day01
       Day02
       Lib
+      NanoParsec
   other-modules:
       Paths_aoc
   hs-source-dirs:

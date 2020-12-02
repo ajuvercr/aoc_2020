@@ -6,6 +6,7 @@ import System.Environment
 import Data.Time.Clock
 import Data.Time.Calendar
 
+import qualified NanoParsec
 import qualified Day01
 import qualified Day02
 
