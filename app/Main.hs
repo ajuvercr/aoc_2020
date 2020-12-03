@@ -6,10 +6,9 @@ import System.Environment
 import Data.Time.Clock
 import Data.Time.Calendar
 
-import qualified NanoParsec
 import qualified Day01
-import qualified Day03
 import qualified Day02
+import qualified Day03
 
 thdOf3 :: (a, b, c) -> c
 thdOf3 (_, _, x) = x
@@ -35,8 +34,8 @@ safeTail []     = []
 
 parse :: [String] -> IO (Int, String)
 parse args = do
-    day <- parseDay $ safeHead args
-    c <- readfile day $ safeHead . safeTail $ args
+    day <- parseDay $ safeHead . safeTail $ args
+    c <- readfile day $ safeHead args
     return (day, c)
 
 
@@ -52,9 +51,10 @@ dayFileLocation day
 
 
 readfile :: Int -> Maybe String -> IO String
-readfile _ (Just "--") = getContents
-readfile _ (Just x) = openFile x ReadMode >>= hGetContents
-readfile day Nothing = openFile (dayFileLocation day) ReadMode >>= hGetContents
+readfile _   (Just "--") = getContents
+readfile day (Just "!")  = openFile (dayFileLocation day) ReadMode >>= hGetContents
+readfile _   (Just x)    = openFile x ReadMode >>= hGetContents
+readfile day Nothing     = openFile (dayFileLocation day) ReadMode >>= hGetContents
 
 
 main :: IO ()
