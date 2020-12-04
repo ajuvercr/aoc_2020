@@ -4,7 +4,6 @@ module Day03
 
 data Slope = Slope {dx::Int, dy::Int} deriving (Show)
 
-
 tree :: Char
 tree = '#'
 

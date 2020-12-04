@@ -13,8 +13,15 @@ runParser :: Parser a -> String -> a
 runParser m s =
   case parse m s of
     [(res, [])] -> res
-    [(_, rs)]   -> error "Parser did not consume entire stream."
+    [(_, rs)]   -> error ("Parser did not consume entire stream. " ++ rs)
     _           -> error "Parser error."
+
+runParserMaybe :: Parser a -> String -> Maybe a
+runParserMaybe m s =
+  case parse m s of
+    [(res, [])] -> Just res
+    [(_, rs)]   -> Nothing
+    _           -> Nothing
 
 item :: Parser Char
 item = Parser $ \case
@@ -106,6 +113,9 @@ string (c:cs) = do { char c; string cs; return (c:cs)}
 -- |Parse some alpha charater sequence
 str :: Parser String
 str = some (satisfy isAlpha)
+
+strAll :: Parser String
+strAll = some (satisfy $ not . (`elem` " \n\r"))
 
 
 -- |Parse some digit sequence as Integer
