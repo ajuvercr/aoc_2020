@@ -15,6 +15,6 @@ module Day$daylong
     (solve
     ) where
 
-    solve :: String -> IO ()
-    solve x = return ()
+solve :: String -> IO ()
+solve x = return ()
 EOF

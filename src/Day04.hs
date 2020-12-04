@@ -6,7 +6,7 @@ import NanoParsec
 import Data.Char
 import Data.Maybe
 import Control.Applicative
-
+import Lib
 
 data Entry = Birth String
     | Issue String
@@ -26,21 +26,6 @@ toEntry "hcl" x = Hair x
 toEntry "ecl" x = Eye x
 toEntry "pid" x = Pid x
 toEntry "cid" x = Cid x
-
-
-splitemptyline :: String -> [String]
-splitemptyline "" = [""]
-splitemptyline ('\n':'\n':xs) = "" : splitemptyline xs
-splitemptyline (x:xs) = (x:current):rest
-    where (current:rest) = splitemptyline xs
-
-
-split :: (a -> Bool) -> [a] -> [[a]]
-split _ [] = [[]]
-split f (x:xs)
-    | f x       = [] : split f xs
-    | otherwise = (x : h) : rest
-    where (h:rest) = split f xs
 
 
 parseEntry :: Parser Entry
@@ -69,15 +54,6 @@ validnumber f s
     | otherwise     = False
 
 
-between :: Int -> Int -> (Int -> Bool)
-between min max x = min <= x && x <= max
-
-
-if' :: Bool -> a -> a -> a
-if' True a _ = a
-if' False _ b = b
-
-
 parseHeight :: Parser (Either Int Int)
 parseHeight = do
     v <- number
@@ -89,11 +65,6 @@ validHeight :: Maybe (Either Int Int) -> Bool
 validHeight Nothing = False
 validHeight (Just (Left x)) = between 59 76 x
 validHeight (Just (Right x)) = between 150 193 x
-
-
-parseTimes :: Int -> Parser a -> Parser ()
-parseTimes 0 _ = return ()
-parseTimes t p = p >> parseTimes (t-1) p
 
 
 validHair :: Parser ()

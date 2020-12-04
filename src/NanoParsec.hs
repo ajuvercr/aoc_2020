@@ -80,6 +80,11 @@ satisfy p = item `bind` \c ->
   then unit c
   else failure
 
+-- | Parse n times something return nothing
+parseTimes :: Int -> Parser a -> Parser ()
+parseTimes 0 _ = return ()
+parseTimes t p = p >> parseTimes (t-1) p
+
 
 -- |Parse a character from [Char]
 oneOf :: String -> Parser Char
