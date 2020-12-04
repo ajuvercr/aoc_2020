@@ -4,6 +4,7 @@ module Lib
     , split
     , if'
     , between
+    , count
     ) where
 
 
@@ -34,3 +35,7 @@ if' False _ b = b
 
 between :: Int -> Int -> (Int -> Bool)
 between min max x = min <= x && x <= max
+
+
+count :: (a -> Bool) -> [a] -> Int
+count f = length . filter f

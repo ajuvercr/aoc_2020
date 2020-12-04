@@ -15,6 +15,8 @@ module Day$daylong
     (solve
     ) where
 
+import Lib
+
 solve :: String -> IO ()
 solve x = return ()
 EOF

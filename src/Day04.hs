@@ -2,11 +2,12 @@ module Day04
     (solve
     ) where
 
+import Lib
 import NanoParsec
 import Data.Char
 import Data.Maybe
 import Control.Applicative
-import Lib
+
 
 data Entry = Birth String
     | Issue String
@@ -16,6 +17,7 @@ data Entry = Birth String
     | Eye String
     | Pid String
     | Cid String  deriving (Show)
+
 
 toEntry :: String -> String -> Entry
 toEntry "byr" x = Birth x
@@ -45,7 +47,7 @@ notcid _ = True
 
 
 isvalid :: [Entry] -> Bool
-isvalid xs = 7 == length (filter notcid xs)
+isvalid xs = 7 == count notcid xs
 
 
 validnumber :: (Int -> Bool) -> String -> Bool
@@ -93,13 +95,13 @@ isvalidentry (Cid _)   = False
 
 
 isvalid2 :: [Entry] -> Bool
-isvalid2 xs = 7 == length (filter isvalidentry xs)
+isvalid2 xs = 7 == count isvalidentry xs
 
 
 solve :: String -> IO ()
 solve x = do
     let entries = parseEntries $ splitemptyline x
     putStr "Part 1: "
-    print $ length $ filter isvalid entries
+    print $ count isvalid entries
     putStr "Part 2: "
-    print $ length $ filter isvalid2 entries
+    print $ count isvalid2 entries

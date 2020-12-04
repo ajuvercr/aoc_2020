@@ -2,6 +2,8 @@ module Day03
     (solve
     ) where
 
+import Lib
+
 data Slope = Slope {dx::Int, dy::Int} deriving (Show)
 
 tree :: Char
@@ -12,7 +14,7 @@ countTrees _ [] _ = []
 countTrees s (x:xs) at = (cycle x !! at) : countTrees s (drop (dy s) xs) (at + dx s)
 
 trySlope :: [String] -> Slope -> Int
-trySlope tob slope = length $ filter (==tree) $ countTrees slope tob 0
+trySlope tob slope = count (==tree) $ countTrees slope tob 0
 
 solve :: String -> IO ()
 solve x = do

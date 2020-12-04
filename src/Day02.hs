@@ -2,6 +2,7 @@ module Day02
     (solve
     ) where
 
+import Lib
 import NanoParsec
 
 data Entry = Entry { pmin :: Int
@@ -27,7 +28,7 @@ parseEntries = map (runParser parseEntry) . lines
 
 iscorrect :: Entry -> Bool
 iscorrect Entry {pmin=min, pmax=max, t=t, password=pw} = min <= c && c <= max
-    where c = countvalid (==t) pw
+    where c = count (==t) pw
 
 
 xor :: Bool -> Bool -> Bool
@@ -40,13 +41,9 @@ iscorrect2 :: Entry -> Bool
 iscorrect2 Entry {pmin=min, pmax=max, t=t, password=pw} = xor (t == pw !! (min - 1)) (t == pw !! (max - 1))
 
 
-countvalid :: (a -> Bool) -> [a] -> Int
-countvalid f x = length $ filter f x
-
-
 solve :: String -> IO ()
 solve x = do
     putStr "Part 1: "
-    print $ countvalid iscorrect $ parseEntries x
+    print $ count iscorrect $ parseEntries x
     putStr "Part 2: "
-    print $ countvalid iscorrect2 $ parseEntries x
+    print $ count iscorrect2 $ parseEntries x
