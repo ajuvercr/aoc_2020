@@ -42,21 +42,15 @@ prepare :: String -> Prep
 prepare = map seatid . parseSeats
 
 part1 :: Prep -> IO ()
-part1 x = do
-    putStr "Par 1: "
-    print $ foldl max 0 x
+part1 x = putStr "Part 1: " >> (print . foldl max 0) x
 
 
 part2 :: Prep -> IO ()
-part2 x = do
-    putStr "Par 2: "
-    print $ findgap $ sort x
+part2 x = putStr "Part 2: " >> (print . findgap . sort) x
 
 
 solve :: Maybe Int -> String -> IO ()
 solve (Just 1) x = part1 $ prepare x
 solve (Just 2) x = part2 $ prepare x
-solve _ x = do
-    let prep = prepare x
-    part1 prep
-    part2 prep
+solve _        x = part1 prep >> part2 prep
+    where prep = prepare x

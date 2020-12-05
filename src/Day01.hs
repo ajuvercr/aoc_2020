@@ -29,22 +29,16 @@ prepare x = (sorted, reverse sorted)
 
 
 part1 :: Prep -> IO ()
-part1 (sorted, revSorted) = do
-    putStr "Par 1: "
-    print $ solve1 2020 sorted revSorted
+part1 (sorted, revSorted) = putStr "Par 1: " >> print (solve1 2020 sorted revSorted)
 
 
 part2 :: Prep -> IO ()
-part2 (sorted, revSorted) = do
-    putStr "Part 2: "
-    let mapper target = (* target) <$> solve1 (2020 - target) sorted revSorted
-    print $ firstJust mapper revSorted
+part2 (sorted, revSorted) = putStr "Part 2: " >> print (firstJust mapper revSorted)
+    where mapper target = (* target) <$> solve1 (2020 - target) sorted revSorted
 
 
 solve :: Maybe Int -> String -> IO ()
 solve (Just 1) x = part1 $ prepare x
 solve (Just 2) x = part2 $ prepare x
-solve _ x = do
-    let prep = prepare x
-    part1 prep
-    part2 prep
+solve _        x = part1 prep >> part2 prep
+    where prep = prepare x
