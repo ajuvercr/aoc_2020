@@ -22,14 +22,29 @@ firstJust f (x:xs) = f x <|> firstJust f xs
 firstJust _ _      = Nothing
 
 
-solve :: String -> IO ()
-solve x = do
-    let sorted = sort . parseinput $ x
-    let revSorted = reverse sorted
+type Prep = ([Int], [Int])
+prepare :: String -> Prep
+prepare x = (sorted, reverse sorted)
+    where sorted = sort . parseinput $ x
 
+
+part1 :: Prep -> IO ()
+part1 (sorted, revSorted) = do
     putStr "Par 1: "
     print $ solve1 2020 sorted revSorted
 
+
+part2 :: Prep -> IO ()
+part2 (sorted, revSorted) = do
     putStr "Part 2: "
     let mapper target = (* target) <$> solve1 (2020 - target) sorted revSorted
     print $ firstJust mapper revSorted
+
+
+solve :: Maybe Int -> String -> IO ()
+solve (Just 1) x = part1 $ prepare x
+solve (Just 2) x = part2 $ prepare x
+solve _ x = do
+    let prep = prepare x
+    part1 prep
+    part2 prep

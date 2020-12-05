@@ -37,11 +37,26 @@ findgap (x:y:xs)
     | otherwise  = x + 1
 
 
-solve :: String -> IO ()
-solve x = do
-    putStr "Part 1: "
-    let ids = map seatid $ parseSeats x
-    print $ foldl max 0 ids
+type Prep = [Int]
+prepare :: String -> Prep
+prepare = map seatid . parseSeats
 
-    putStr "Part 2: "
-    print $ findgap $ sort ids
+part1 :: Prep -> IO ()
+part1 x = do
+    putStr "Par 1: "
+    print $ foldl max 0 x
+
+
+part2 :: Prep -> IO ()
+part2 x = do
+    putStr "Par 2: "
+    print $ findgap $ sort x
+
+
+solve :: Maybe Int -> String -> IO ()
+solve (Just 1) x = part1 $ prepare x
+solve (Just 2) x = part2 $ prepare x
+solve _ x = do
+    let prep = prepare x
+    part1 prep
+    part2 prep

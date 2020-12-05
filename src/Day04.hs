@@ -96,10 +96,27 @@ isvalid2 :: [Entry] -> Bool
 isvalid2 xs = 7 == count isvalidentry xs
 
 
-solve :: String -> IO ()
-solve x = do
-    let entries = parseEntries $ splitemptyline x
-    putStr "Part 1: "
-    print $ count isvalid entries
-    putStr "Part 2: "
-    print $ count isvalid2 entries
+type Prep = [[Entry]]
+prepare :: String -> Prep
+prepare = parseEntries . splitemptyline
+
+
+part1 :: Prep -> IO ()
+part1 x = do
+    putStr "Par 1: "
+    print $ count isvalid x
+
+
+part2 :: Prep -> IO ()
+part2 x = do
+    putStr "Par 2: "
+    print $ count isvalid2 x
+
+
+solve :: Maybe Int -> String -> IO ()
+solve (Just 1) x = part1 $ prepare x
+solve (Just 2) x = part2 $ prepare x
+solve _ x = do
+    let prep = prepare x
+    part1 prep
+    part2 prep

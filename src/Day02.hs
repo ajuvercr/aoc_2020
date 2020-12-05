@@ -41,9 +41,27 @@ iscorrect2 :: Entry -> Bool
 iscorrect2 Entry {pmin=min, pmax=max, t=t, password=pw} = xor (t == pw !! (min - 1)) (t == pw !! (max - 1))
 
 
-solve :: String -> IO ()
-solve x = do
-    putStr "Part 1: "
-    print $ count iscorrect $ parseEntries x
-    putStr "Part 2: "
-    print $ count iscorrect2 $ parseEntries x
+type Prep = [Entry]
+prepare :: String -> Prep
+prepare = parseEntries
+
+
+part1 :: Prep -> IO ()
+part1 x = do
+    putStr "Par 1: "
+    print $ count iscorrect x
+
+
+part2 :: Prep -> IO ()
+part2 x = do
+    putStr "Par 2: "
+    print $ count iscorrect2 x
+
+
+solve :: Maybe Int -> String -> IO ()
+solve (Just 1) x = part1 $ prepare x
+solve (Just 2) x = part2 $ prepare x
+solve _ x = do
+    let prep = prepare x
+    part1 prep
+    part2 prep

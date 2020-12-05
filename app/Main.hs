@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 module Main where
 
 import System.IO
@@ -34,16 +35,11 @@ safeTail (_:xs) = xs
 safeTail []     = []
 
 
-parse :: [String] -> IO (Int, String)
-parse args = do
-    day <- parseDay $ safeHead . safeTail $ args
-    c <- readfile day $ safeHead args
-    return (day, c)
-
-
-parseDay :: Maybe String -> IO Int
-parseDay (Just x) = return $ read x
-parseDay Nothing = dayofmonth
+parse :: [String] -> IO (Int, Maybe Int, String)
+parse [file, day, part] = (read day, Just $ read part, ) <$> readfile (read day) (Just file)
+parse [file, day] = (read day, Nothing, ) <$> readfile (read day) (Just file)
+parse [file] = dayofmonth >>= \day -> (day, Nothing, ) <$> readfile day (Just file)
+parse [] = dayofmonth >>= \day -> (day, Nothing, ) <$> readfile day Nothing
 
 
 dayFileLocation :: Int -> String
@@ -59,10 +55,13 @@ readfile _   (Just x)    = openFile x ReadMode >>= hGetContents
 readfile day Nothing     = openFile (dayFileLocation day) ReadMode >>= hGetContents
 
 
-main :: IO ()
-main = getArgs >>= parse >>= uncurry solve
+uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
+uncurry3 f ~(a,b,c) = f a b c
 
-solve :: Int -> String -> IO ()
+main :: IO ()
+main = getArgs >>= parse >>= uncurry3 solve
+
+solve :: Int -> Maybe Int -> String -> IO ()
 solve 1 = Day01.solve
 solve 2 = Day02.solve
 solve 3 = Day03.solve

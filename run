@@ -1,0 +1,6 @@
+#!/bin/sh
+day="$1"
+part="$2"
+inputfile="$3"
+
+./aoc "$inputfile" "$day" "$part"

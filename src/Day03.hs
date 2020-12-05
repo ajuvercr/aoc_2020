@@ -17,12 +17,27 @@ trySlope :: [String] -> Slope -> Int
 trySlope tob slope = count (==tree) $ countTrees slope tob 0
 
 
-solve :: String -> IO ()
-solve x = do
-    let tob = lines x
+type Prep = [String]
+prepare :: String -> Prep
+prepare = lines
 
+
+part1 :: Prep -> IO ()
+part1 tob = do
     putStr "Part 1: "
     print $ trySlope tob $ Slope 3 0
+
+
+part2 :: Prep -> IO ()
+part2 tob = do
     putStr "Part 2: "
     print $ product $ map (trySlope tob) [Slope 1 0, Slope 3 0, Slope 5 0, Slope 7 0, Slope 1 1]
-    return ()
+
+
+solve :: Maybe Int -> String -> IO ()
+solve (Just 1) x = part1 $ prepare x
+solve (Just 2) x = part2 $ prepare x
+solve _ x = do
+    let prep = prepare x
+    part1 prep
+    part2 prep
