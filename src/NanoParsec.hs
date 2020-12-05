@@ -81,9 +81,9 @@ satisfy p = item `bind` \c ->
   else failure
 
 -- | Parse n times something return nothing
-parseTimes :: Int -> Parser a -> Parser ()
-parseTimes 0 _ = return ()
-parseTimes t p = p >> parseTimes (t-1) p
+parseTimes :: Int -> Parser a -> Parser [a]
+parseTimes 0 _ = return []
+parseTimes t p = p >>= \x -> (x:) <$> parseTimes (t-1) p
 
 
 -- |Parse a character from [Char]

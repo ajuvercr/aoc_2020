@@ -16,6 +16,7 @@ countTrees s (x:xs) at = (cycle x !! at) : countTrees s (drop (dy s) xs) (at + d
 trySlope :: [String] -> Slope -> Int
 trySlope tob slope = count (==tree) $ countTrees slope tob 0
 
+
 solve :: String -> IO ()
 solve x = do
     let tob = lines x

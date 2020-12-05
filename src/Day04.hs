@@ -70,16 +70,14 @@ validHeight (Just (Right x)) = between 150 193 x
 
 
 validHair :: Parser ()
-validHair = do
-    char '#'
-    parseTimes 6 $ digit <|> oneOf "abcdef"
+validHair = char '#' >> parseTimes 6 (digit <|> oneOf "abcdef") >> return ()
 
 
 validEye :: String -> Bool
 validEye x = x `elem` ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
 
-validPid :: Parser ()
+validPid :: Parser String
 validPid = parseTimes 9 digit
 
 
