@@ -10,21 +10,25 @@ parseEntries :: String -> [Set Char]
 parseEntries = map fromList . lines
 
 
-type Prep = [[Set Char]]
-prepare :: String -> Prep
-prepare = map parseEntries . splitemptyline
-
-
-part1 :: Prep -> IO ()
-part1 x = putStr "Part 1: " >> (print . sum . map (size . foldl union empty)) x
+doTheThing :: (Set Char -> Set Char -> Set Char) -> Set Char -> Prep -> Int
+doTheThing f init = sum . map (size . foldl f init)
 
 
 alphaSet :: Set Char
 alphaSet = fromList "abcdefghijklmnopqrstuvwxyz"
 
 
+type Prep = [[Set Char]]
+prepare :: String -> Prep
+prepare = map parseEntries . splitemptyline
+
+
+part1 :: Prep -> IO ()
+part1 x = putStr "Part 1: " >> (print . doTheThing union empty) x
+
+
 part2 :: Prep -> IO ()
-part2 x = putStr "Part 2: " >> (print . sum . map (size . foldl intersection alphaSet)) x
+part2 x = putStr "Part 2: " >> (print . doTheThing intersection alphaSet) x
 
 
 solve :: Maybe Int -> String -> IO ()
