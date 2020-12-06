@@ -109,6 +109,11 @@ char :: Char -> Parser Char
 char c = satisfy (c ==)
 
 
+-- |Parse multiple instances
+multiple :: Parser a -> Parser [a]
+multiple x = liftM2 (:) x (multiple x <|> return [])
+
+
 -- |Parse a specific String
 string :: String -> Parser String
 string [] = return []
@@ -118,6 +123,7 @@ string (c:cs) = do { char c; string cs; return (c:cs)}
 -- |Parse some alpha charater sequence
 str :: Parser String
 str = some (satisfy isAlpha)
+
 
 strAll :: Parser String
 strAll = some (satisfy $ not . (`elem` " \n\r"))

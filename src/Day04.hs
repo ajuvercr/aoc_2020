@@ -7,7 +7,7 @@ import NanoParsec
 import Data.Char
 import Data.Maybe
 import Control.Applicative
-
+import Control.Monad (liftM2)
 
 data Entry = Birth String
     | Issue String
@@ -19,26 +19,22 @@ data Entry = Birth String
     | Cid String  deriving (Show)
 
 
-toEntry :: String -> String -> Entry
-toEntry "byr" x = Birth x
-toEntry "iyr" x = Issue x
-toEntry "eyr" x = Expr x
-toEntry "hgt" x = Hgt x
-toEntry "hcl" x = Hair x
-toEntry "ecl" x = Eye x
-toEntry "pid" x = Pid x
-toEntry "cid" x = Cid x
-
-
 parseEntry :: Parser Entry
-parseEntry = do
-    key <- str
-    char ':'
-    toEntry key <$> token strAll
+parseEntry = byr <|> iyr <|> eyr <|> hgt <|> hcl <|> ecl <|> pid <|> cid
+    where
+        little x f = string x >> char ':' >> f <$> token strAll
+        byr = little "byr" Birth
+        iyr = little "iyr" Issue
+        eyr = little "eyr" Expr
+        hgt = little "hgt" Hgt
+        hcl = little "hcl" Hair
+        ecl = little "ecl" Eye
+        pid = little "pid" Pid
+        cid = little "cid" Cid
 
 
 parseEntries :: [String] -> [[Entry]]
-parseEntries = map $ mapMaybe (runParserMaybe parseEntry) . split (`elem` " \n")
+parseEntries = map $ runParser $ multiple parseEntry
 
 
 notcid :: Entry -> Bool
@@ -56,17 +52,14 @@ validnumber f s
     | otherwise     = False
 
 
-parseHeight :: Parser (Either Int Int)
-parseHeight = do
-    v <- number
-    t <- str
-    return $ if' (t == "in") (Left v) (Right v)
+parseHeight :: Parser (Int, String)
+parseHeight = liftM2 (,) number str
 
 
-validHeight :: Maybe (Either Int Int) -> Bool
+validHeight :: Maybe (Int, String) -> Bool
 validHeight Nothing = False
-validHeight (Just (Left x)) = between 59 76 x
-validHeight (Just (Right x)) = between 150 193 x
+validHeight (Just (x, "in")) = between 59 76 x
+validHeight (Just (x, "cm")) = between 150 193 x
 
 
 validHair :: Parser ()
