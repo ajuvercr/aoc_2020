@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e54f513265ddd0b747861a1d016b15f0b1b685f9e626c5ae04cd22e80fff79aa
+-- hash: 7cd0b957a67a5d5f2ce8a51882a072f499a9146c012478b32e6be269f251f8b8
 
 name:           aoc
 version:        0.20.20.0
@@ -26,6 +26,7 @@ extra-source-files:
     res/04.txt
     res/04_test.txt
     res/05.txt
+    res/06.txt
 
 source-repository head
   type: git
@@ -38,6 +39,7 @@ library
       Day03
       Day04
       Day05
+      Day06
       Lib
       NanoParsec
   other-modules:
@@ -46,6 +48,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , containers
     , parallel
     , time
   default-language: Haskell2010
@@ -60,6 +63,7 @@ executable aoc-exe
   build-depends:
       aoc
     , base >=4.7 && <5
+    , containers
     , parallel
     , time
   default-language: Haskell2010
@@ -75,6 +79,7 @@ test-suite aoc-test
   build-depends:
       aoc
     , base >=4.7 && <5
+    , containers
     , parallel
     , time
   default-language: Haskell2010
