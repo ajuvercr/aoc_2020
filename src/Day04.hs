@@ -34,7 +34,7 @@ parseEntry = byr <|> iyr <|> eyr <|> hgt <|> hcl <|> ecl <|> pid <|> cid
 
 
 parseEntries :: [String] -> [[Entry]]
-parseEntries = map $ runParser $ multiple parseEntry
+parseEntries = map $ runParser $ star parseEntry
 
 
 notcid :: Entry -> Bool

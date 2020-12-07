@@ -3,86 +3,89 @@
 module NanoParsec where
 
 import Data.Char
+import Data.Functor (($>))
 import Control.Monad
 import Control.Applicative
+import Data.Bifunctor (first)
 
-newtype Parser a = Parser { parse :: String -> [(a,String)] }
+newtype Parser a = Parser { parse :: String -> Maybe (a, String) }
 
-runParser :: Show a => Parser a -> String -> a
+runParser :: Parser a -> String -> a
 runParser m s =
   case parse m s of
-    [(res, [])] -> res
-    [(_, rs)]   -> error ("Parser did not consume entire stream. " ++ rs)
-    xs           -> error ("Parser error. " ++ show xs)
+    Just (res, "") -> res
+    Just (_, x)    -> error ("Parser didn't consume entire stream '" ++ x ++ "'")
+    _              -> error "Parse failed"
 
 runParserMaybe :: Parser a -> String -> Maybe a
 runParserMaybe m s =
-  case parse m s of
-    [(res, [])] -> Just res
-    [(_, rs)]   -> Nothing
-    _           -> Nothing
+    case parse m s of
+    Just (res, "") -> Just res
+    _              -> Nothing
+
 
 item :: Parser Char
 item = Parser $ \case
-   []     -> []
-   (c:cs) -> [(c,cs)]
+   []     -> empty
+   (c:cs) -> pure (c,cs)
+
+
+unit :: a -> Parser a
+unit a = Parser (\s -> pure (a,s))
 
 
 bind :: Parser a -> (a -> Parser b) -> Parser b
-bind p f = Parser $ \s -> concatMap (\(a, s') -> parse (f a) s') $ parse p s
+bind x f = Parser $ \s -> case parse x s of
+  Nothing -> Nothing
+  Just (x, xs) -> parse (f x) xs
 
-unit :: a -> Parser a
-unit a = Parser (\s -> [(a,s)])
 
 instance Functor Parser where
-  fmap f (Parser cs) = Parser (\s -> [(f a, b) | (a, b) <- cs s])
+  fmap f p = Parser $ \s -> fmap (first f) (parse p s)
+
 
 instance Applicative Parser where
-  pure = return
-  (Parser cs1) <*> (Parser cs2) = Parser (\s -> [(f a, s2) | (f, s1) <- cs1 s, (a, s2) <- cs2 s1])
+  pure x  = Parser $ \s -> pure (x, s)
+  f <*> x = Parser $ \s -> case parse f s of
+    Nothing -> Nothing
+    Just (f', s') -> case parse x s' of
+      Nothing -> Nothing
+      Just (x', s'') -> pure (f' x', s'')
+
 
 instance Monad Parser where
   return = unit
   (>>=)  = bind
 
-instance MonadPlus Parser where
-  mzero = failure
-  mplus = combine
 
 instance Alternative Parser where
-  empty = mzero
+  empty = Parser (const Nothing)
   (<|>) = option
-
-
--- |Parse a or b
-combine :: Parser a -> Parser a -> Parser a
-combine p q = Parser (\s -> parse p s ++ parse q s)
-
-
--- |Parse failure
-failure :: Parser a
-failure = Parser (const [])
 
 
 -- |Parse a or b
 option :: Parser a -> Parser a -> Parser a
 option  p q = Parser $ \s ->
   case parse p s of
-    []     -> parse q s
-    res    -> res
+    Nothing     -> parse q s
+    res         -> res
 
 
 -- |Parse a character satisfying something
 satisfy :: (Char -> Bool) -> Parser Char
-satisfy p = item `bind` \c ->
-  if p c
-  then unit c
-  else failure
+satisfy p = Parser $ \case
+  c:cs | p c -> pure (c, cs)
+  _          -> empty
+
 
 -- | Parse n times something return nothing
 parseTimes :: Int -> Parser a -> Parser [a]
 parseTimes 0 _ = return []
-parseTimes t p = p >>= \x -> (x:) <$> parseTimes (t-1) p
+parseTimes t p = (:) <$> p <*> parseTimes (t-1) p
+
+
+ignore :: Parser a -> Parser ()
+ignore p = p $> ()
 
 
 -- |Parse a character from [Char]
@@ -90,62 +93,48 @@ oneOf :: String -> Parser Char
 oneOf s = satisfy (`elem` s)
 
 
-chainl :: Parser a -> Parser (a -> a -> a) -> a -> Parser a
-chainl p op a = (p `chainl1` op) <|> return a
-
-
--- |Chain parsers p and reduce with op
-chainl1 :: Parser a -> Parser (a -> a -> a) -> Parser a
-p `chainl1` op = do {a <- p; rest a}
-  where rest a = (do f <- op
-                     b <- p
-                     rest (f a b))
-                 <|> return a
-
-
 -- |Parse a specific character
 char :: Char -> Parser Char
 char c = satisfy (c ==)
 
 
--- |Parse multiple instances
-multiple :: Parser a -> Parser [a]
-multiple x = liftM2 (:) x (multiple x <|> return [])
-
-
 -- |Parse a specific String
-string :: String -> Parser String
-string [] = return []
-string (c:cs) = do { char c; string cs; return (c:cs)}
+string :: String -> Parser ()
+string = foldr ((*>) . char) (return ())
 
 
 -- |Parse some alpha charater sequence
 str :: Parser String
-str = some (satisfy isAlpha)
+str = plus (satisfy isAlpha)
 
 
 strAll :: Parser String
-strAll = some (satisfy $ not . (`elem` " \n\r"))
+strAll = plus (satisfy $ not . (`elem` " \n\r"))
 
 
--- |Parse some digit sequence as Integer
-natural :: Parser Integer
-natural = read <$> some (satisfy isDigit)
+-- match zero or more occurrences
+star :: Parser a -> Parser [a]
+star p = plus p <|> pure []
+
+
+-- match one or more occurrences
+plus :: Parser a -> Parser [a]
+plus p = (:) <$> p <*> star p
 
 
 -- |Parse something followed by whitespace
 token :: Parser a -> Parser a
-token p = do { a <- p; spaces ; return a}
+token p = p <* spaces
 
 
 -- |Parse a string followed by whitespace
-reserved :: String -> Parser String
+reserved :: String -> Parser ()
 reserved s = token $ string s
 
 
 -- |Parse much whitespace
 spaces :: Parser String
-spaces = many $ oneOf " \n\r"
+spaces = star $ oneOf " \n\r"
 
 
 -- |Parse one digit
@@ -153,18 +142,16 @@ digit :: Parser Char
 digit = satisfy isDigit
 
 
+-- |Parse some digit sequence as UInt
+natural :: Parser Integer
+natural = read <$> plus digit
+
+
 -- |Parse some digit sequence as Int
 number :: Parser Int
-number = do
-  s <- string "-" <|> return []
-  cs <- some digit
-  return $ read (s ++ cs)
+number = read <$> liftM2 (:) (char '-' <|> return ' ') (plus digit)
 
 
 -- |Parse a something inside parentheses
 parens :: Parser a -> Parser a
-parens m = do
-  reserved "("
-  n <- m
-  reserved ")"
-  return n
+parens m = reserved "(" *> m <* reserved ")"

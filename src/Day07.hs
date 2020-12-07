@@ -31,7 +31,7 @@ parseReq = do
 
 
 parseReqs :: Parser [(Int, String)]
-parseReqs = multiple parseReq
+parseReqs = plus parseReq
 
 
 parseBag :: Parser Bag
