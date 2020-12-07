@@ -42,9 +42,14 @@ parseBag = do
     return $ Bag name reqs
 
 
-validBag :: Bag -> Set String -> Bool
-validBag Bag {color=_, req=req} vs = all invs req
-    where invs (_, n) = Set.member n vs
+allInValid :: Bag -> Set String -> Bool
+allInValid b valid = all invs (req b)
+    where invs (_, n) = n `elem` valid
+
+
+someInValid :: Bag -> Set String -> Bool
+someInValid b valid = any invs (req b)
+    where invs (_, n) = n `elem` valid
 
 
 insertAll :: Ord a => Set a -> [a] -> Set a
@@ -53,7 +58,7 @@ insertAll = foldl (flip Set.insert)
 
 partitionReqs :: [Bag] -> Set String -> ([Bag], [Bag])
 partitionReqs (b:bs) valid
-    | validBag b valid = (bad, b:good)
+    | allInValid b valid = (bad, b:good)
     | otherwise        = (b:bad, good)
     where (bad, good) = partitionReqs bs valid
 partitionReqs [] _ = ([], [])
@@ -65,30 +70,24 @@ sortReqs bs valid = let (bad, good) = partitionReqs bs valid
                     in good ++ sortReqs bad (insertAll valid (map color good))
 
 
-containsShiny :: Bag -> Set String -> Bool
-containsShiny b valid = any invs (req b)
-    where invs (_, n) = n `elem` valid
-
-
 shinies :: [Bag] -> Set String -> Set String
-shinies (b:bs) valid
-    | containsShiny b valid = shinies bs (Set.insert (color b) valid)
-    | otherwise             = shinies bs valid
 shinies [] valid = valid
+shinies (b:bs) valid
+    | someInValid b valid = shinies bs (Set.insert (color b) valid)
+    | otherwise           = shinies bs valid
 
 
 countBags :: Map String Int -> Bag -> Map String Int
 countBags m Bag {color=name, req=req} = Map.insert name c m
-    where
-        c = 1 + sum (map (\(t, n) -> t * m Map.! n) req)
+    where c = 1 + sum (map (\(t, n) -> t * m Map.! n) req)
 
 
 type Prep = [Bag]
 prepare :: String -> Prep
-prepare x = b
+prepare x = sorted
     where
-        bags = map (runParser parseBag) $ lines x
-        b = sortReqs bags Set.empty
+        bags   = map (runParser parseBag) $ lines x
+        sorted = sortReqs bags Set.empty
 
 
 part1 :: Prep -> IO ()
@@ -101,7 +100,7 @@ part2 :: Prep -> IO ()
 part2 x = do
     putStr "Part 2: "
     let folded = foldl countBags Map.empty x :: Map String Int
-    print $ folded Map.! "shiny gold" -1
+    print $ folded Map.! "shiny gold" -1 -- Initial shiny gold bag
 
 
 solve :: Maybe Int -> String -> IO ()
