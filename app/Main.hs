@@ -14,6 +14,7 @@ import qualified Day04
 import qualified Day05
 import qualified Day06
 import qualified Day07
+import qualified Day08
 
 thdOf3 :: (a, b, c) -> c
 thdOf3 (_, _, x) = x
@@ -71,3 +72,4 @@ solve 4 = Day04.solve
 solve 5 = Day05.solve
 solve 6 = Day06.solve
 solve 7 = Day07.solve
+solve 8 = Day08.solve

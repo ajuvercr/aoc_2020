@@ -149,7 +149,7 @@ natural = read <$> plus digit
 
 -- |Parse some digit sequence as Int
 number :: Parser Int
-number = read <$> liftM2 (:) (char '-' <|> return ' ') (plus digit)
+number = read <$> liftM2 (:) (char '-' <|> (char '+' >> return ' ') <|> return ' ') (plus digit)
 
 
 -- |Parse a something inside parentheses

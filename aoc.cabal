@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b01f96418cee0ebe0ffef5f7b9d08def089893c4e0c31deaf21375ad55aedcaf
+-- hash: c1c3d7aafcc2901ea19ebddfc7c6457fda6bce4449ee9dd72d3aec932689d390
 
 name:           aoc
 version:        0.20.20.0
@@ -29,6 +29,8 @@ extra-source-files:
     res/06.txt
     res/07.txt
     res/07_test.txt
+    res/08.txt
+    res/08_test.txt
 
 source-repository head
   type: git
@@ -43,6 +45,7 @@ library
       Day05
       Day06
       Day07
+      Day08
       Lib
       NanoParsec
   other-modules:
