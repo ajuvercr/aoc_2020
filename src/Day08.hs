@@ -26,7 +26,7 @@ parseInst = parseInst' . words
 
 
 parseInstruction :: Parser Instruction
-parseInstruction = liftM2 little (token str) number
+parseInstruction = liftM2 little (token str) (token number)
     where
         little "nop" = Nop
         little "acc" = Acc
@@ -81,8 +81,7 @@ doPart2 b (i:is)
 
 type Prep = [Instruction]
 prepare :: String -> Prep
--- prepare = map parseInst . lines
-prepare = map (runParser parseInstruction) . lines
+prepare = runParser $ star parseInstruction
 
 
 part1 :: Prep -> IO ()

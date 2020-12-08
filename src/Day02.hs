@@ -19,11 +19,12 @@ parseEntry = do
     t <- token item
     token $ char ':'
     pass <- str
+    spaces
     return Entry { pmin=min, pmax=max, t=t, password=pass }
 
 
 parseEntries :: String -> [Entry]
-parseEntries = map (runParser parseEntry) . lines
+parseEntries = runParser $ star parseEntry
 
 
 iscorrect :: Entry -> Bool

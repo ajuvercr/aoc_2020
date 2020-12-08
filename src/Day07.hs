@@ -39,6 +39,7 @@ parseBag = do
     name <- parseBagName
     reserved "contain"
     reqs <- parseReqs <|> (reserved "no other bags." >> return [])
+    spaces
     return $ Bag name reqs
 
 
@@ -84,10 +85,9 @@ countBags m Bag {color=name, req=req} = Map.insert name c m
 
 type Prep = [Bag]
 prepare :: String -> Prep
-prepare x = sorted
+prepare = sorted . runParser (star parseBag)
     where
-        bags   = map (runParser parseBag) $ lines x
-        sorted = sortReqs bags Set.empty
+        sorted bags = sortReqs bags Set.empty
 
 
 part1 :: Prep -> IO ()

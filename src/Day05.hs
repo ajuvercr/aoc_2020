@@ -9,7 +9,7 @@ data Seat = Seat {x::Int, y::Int} deriving (Show)
 
 
 parseSeats :: String -> [Seat]
-parseSeats = map (runParser parseSeat) . lines
+parseSeats = runParser $ star parseSeat
 
 
 parseSeat :: Parser Seat
