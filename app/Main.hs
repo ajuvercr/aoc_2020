@@ -61,8 +61,10 @@ readfile day Nothing     = openFile (dayFileLocation day) ReadMode >>= hGetConte
 uncurry3 :: (a -> b -> c -> d) -> (a, b, c) -> d
 uncurry3 f ~(a,b,c) = f a b c
 
+
 main :: IO ()
 main = getArgs >>= parse >>= uncurry3 solve
+
 
 solve :: Int -> Maybe Int -> String -> IO ()
 solve 1 = Day01.solve

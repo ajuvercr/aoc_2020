@@ -12,6 +12,18 @@ data Instruction = Nop Int
                  | Jmp Int
                  deriving (Show)
 
+advRead :: String -> Int
+advRead ('+':xs) = read xs
+advRead x = read x
+
+parseInst' :: [String] -> Instruction
+parseInst' ["nop", x] = Nop $ advRead x
+parseInst' ["acc", x] = Acc $ advRead x
+parseInst' ["jmp", x] = Jmp $ advRead x
+
+parseInst :: String -> Instruction
+parseInst = parseInst' . words
+
 
 parseInstruction :: Parser Instruction
 parseInstruction = liftM2 little (token str) number
@@ -69,6 +81,7 @@ doPart2 b (i:is)
 
 type Prep = [Instruction]
 prepare :: String -> Prep
+-- prepare = map parseInst . lines
 prepare = map (runParser parseInstruction) . lines
 
 
