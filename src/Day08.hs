@@ -2,6 +2,7 @@ module Day08
     (solve
     ) where
 
+import Lib
 import NanoParsec
 import Control.Monad (liftM2)
 
@@ -12,18 +13,6 @@ data Instruction = Nop Int
                  | Jmp Int
                  deriving (Show)
 
-advRead :: String -> Int
-advRead ('+':xs) = read xs
-advRead x = read x
-
-parseInst' :: [String] -> Instruction
-parseInst' ["nop", x] = Nop $ advRead x
-parseInst' ["acc", x] = Acc $ advRead x
-parseInst' ["jmp", x] = Jmp $ advRead x
-
-parseInst :: String -> Instruction
-parseInst = parseInst' . words
-
 
 parseInstruction :: Parser Instruction
 parseInstruction = liftM2 little (token str) (token number)
@@ -31,32 +20,6 @@ parseInstruction = liftM2 little (token str) (token number)
         little "nop" = Nop
         little "acc" = Acc
         little "jmp" = Jmp
-
-
-exec :: Prep -> Int -> Int -> (Int, Int)
-exec is i = step (is !! i) i
-    where
-        step (Acc x) i acc = (i+1, acc+x)
-        step (Nop _) i acc = (i+1, acc)
-        step (Jmp x) i acc = (i+x, acc)
-
-
-fromLeft :: Either a b -> a
-fromLeft (Left x) = x
-
-
-run :: Prep -> Either Int Int
-run x = doPart1 x empty 0 0
-
-
-doPart1 :: Prep -> Set Int -> Int -> Int -> Either Int Int
-doPart1 is done i acc
-    | i >= length is = Right acc
-    | i `elem` done  = Left acc
-    | otherwise      = uncurry (doPart1 is newdone) state
-    where
-        newdone = i `insert` done
-        state   = exec is i acc
 
 
 filterInstr :: Instruction -> Bool
@@ -71,12 +34,42 @@ changeInstr (Jmp x) = Nop x
 changeInstr x       = x
 
 
-doPart2 :: Prep -> Prep -> Int
-doPart2 b (i:is)
-    | filterInstr i = case run (b ++ changeInstr i:is) of
-        Right x -> x
-        Left  _ -> doPart2 (b ++ [i]) is
-    | otherwise     = doPart2 (b ++ [i]) is
+currentInstr :: Program -> Instruction
+currentInstr p = let (i, _) = state p in
+                 insts p !! i
+
+
+step :: Instruction -> (Int, Int) -> (Int, Int)
+step (Acc x) (i, acc) = (i+1, acc+x)
+step (Nop _) (i, acc) = (i+1, acc)
+step (Jmp x) (i, acc) = (i+x, acc)
+
+
+data Program = Program { insts :: Prep
+                       , done  :: Set Int
+                       , state :: (Int, Int)
+                       }
+
+
+run :: Program -> Either Int Int
+run Program { insts=insts, done=done, state=(i, acc)}
+    | i `elem` done     = Right acc
+    | i >= length insts = Left acc
+    | otherwise         = run $ step' (insts !! i) (Program insts done (i, acc))
+
+
+step' :: Instruction -> Program -> Program
+step' ins Program { insts=insts, done=done, state=(i, acc)} = Program insts newdone newstate
+    where
+        newdone = i `insert` done
+        newstate = step ins (i, acc)
+
+
+bind' :: Program -> Either Int Program
+bind' prog
+    | filterInstr instr = run (step' (changeInstr instr) prog) >> Right (step' instr prog)
+    | otherwise         = Right (step' instr prog)
+    where instr = currentInstr prog
 
 
 type Prep = [Instruction]
@@ -85,11 +78,12 @@ prepare = runParser $ star parseInstruction
 
 
 part1 :: Prep -> IO ()
-part1 x = putStr "Part 1: " >> print (fromLeft $ run x)
+part1 x = putStr "Part 1: " >> print (fromRight $ run (Program x empty (0,0)))
 
 
 part2 :: Prep -> IO ()
-part2 x = putStr "Part 2: " >> print (doPart2 [] x)
+part2 x = putStr "Part 2: " >> (print . fromLeft . p2) (Program x empty (0,0))
+    where p2 x = bind' x >>= p2
 
 
 solve :: Maybe Int -> String -> IO ()

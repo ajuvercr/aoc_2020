@@ -1,11 +1,4 @@
-module Lib
-    ( printArray
-    , splitemptyline
-    , split
-    , if'
-    , between
-    , count
-    ) where
+module Lib where
 
 
 printArray :: Show a => [a] -> IO ()
@@ -39,3 +32,10 @@ between min max x = min <= x && x <= max
 
 count :: (a -> Bool) -> [a] -> Int
 count f = length . filter f
+
+
+fromLeft :: Either a b -> a
+fromLeft (Left x) = x
+
+fromRight :: Either a b -> b
+fromRight (Right x) = x
