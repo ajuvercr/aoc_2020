@@ -5,7 +5,7 @@ module Day08
 import Lib
 import NanoParsec
 import Control.Monad (liftM2)
-
+import Data.Functor
 import Data.Set (Set, insert, empty)
 
 data Instruction = Nop Int
@@ -34,11 +34,6 @@ changeInstr (Jmp x) = Nop x
 changeInstr x       = x
 
 
-currentInstr :: Program -> Instruction
-currentInstr p = let (i, _) = state p in
-                 insts p !! i
-
-
 step :: Instruction -> (Int, Int) -> (Int, Int)
 step (Acc x) (i, acc) = (i+1, acc+x)
 step (Nop _) (i, acc) = (i+1, acc)
@@ -49,6 +44,11 @@ data Program = Program { insts :: Prep
                        , done  :: Set Int
                        , state :: (Int, Int)
                        }
+
+
+currentInstr :: Program -> Instruction
+currentInstr p = let (i, _) = state p in
+                 insts p !! i
 
 
 run :: Program -> Either Int Int
@@ -67,9 +67,12 @@ step' ins Program { insts=insts, done=done, state=(i, acc)} = Program insts newd
 
 bind' :: Program -> Either Int Program
 bind' prog
-    | filterInstr instr = run (step' (changeInstr instr) prog) >> Right (step' instr prog)
-    | otherwise         = Right (step' instr prog)
-    where instr = currentInstr prog
+    | filterInstr instr = run (step' instr' prog) $> newprog
+    | otherwise         = return newprog
+    where
+        instr   = currentInstr prog
+        instr'  = changeInstr instr
+        newprog = step' instr prog
 
 
 type Prep = [Instruction]
