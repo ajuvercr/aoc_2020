@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1f59b63a47a135884423b2bee61832bc25c9bb01d1a3b0f5853d9ef07f95877a
+-- hash: d90e5def587439fa86a493f302aa9ec0fe99706523bfa90ee94b463cfedf4670
 
 name:           aoc
 version:        0.20.20.0
@@ -35,6 +35,7 @@ extra-source-files:
     res/09_test.txt
     res/10.txt
     res/11.txt
+    res/11_test.txt
 
 source-repository head
   type: git
