@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d90e5def587439fa86a493f302aa9ec0fe99706523bfa90ee94b463cfedf4670
+-- hash: 01c0c7624ef0084c2eeaf0be4b12a58fb986df6b2905d5b29ec824e6d9e985e1
 
 name:           aoc
 version:        0.20.20.0
@@ -63,6 +63,7 @@ library
   build-depends:
       base >=4.7 && <5
     , containers
+    , data-ordlist
     , parallel
     , time
   default-language: Haskell2010
@@ -78,6 +79,7 @@ executable aoc-exe
       aoc
     , base >=4.7 && <5
     , containers
+    , data-ordlist
     , parallel
     , time
   default-language: Haskell2010
@@ -94,6 +96,7 @@ test-suite aoc-test
       aoc
     , base >=4.7 && <5
     , containers
+    , data-ordlist
     , parallel
     , time
   default-language: Haskell2010

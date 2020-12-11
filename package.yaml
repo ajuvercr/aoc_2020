@@ -17,6 +17,7 @@ dependencies:
 - parallel
 - time
 - containers
+- data-ordlist
 
 library:
   source-dirs: src
