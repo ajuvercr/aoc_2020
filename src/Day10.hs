@@ -21,7 +21,7 @@ insertJolt s@(State o r l) n = update (n - l) $ s {llst=n}
 
 doPart2 :: (Int, Int, Int) -> Bool -> (Int, Int, Int)
 doPart2 (_, j, k) False = (j, k, 0)
-doPart2 (i, j, k) True = (j, k, i + j + k)
+doPart2 (i, j, k) True  = (j, k, i + j + k)
 
 
 prepPart2 :: [Int] -> [Bool]
