@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fbfc2520850137b86470f2c9b7afac99ffbc81fc3c23f9f6bd1fb7192512ad09
+-- hash: b0d686cde467c0f2f15564f002dd6ce9443b4c98361d13428a6502826ab7ef38
 
 name:           aoc
 version:        0.20.20.0
@@ -55,6 +55,7 @@ library
       Day09
       Day10
       Day11
+      Day11_2
       Day12
       DList
       Lib
@@ -67,6 +68,7 @@ library
       base >=4.7 && <5
     , containers
     , data-ordlist
+    , mtl
     , parallel
     , time
   default-language: Haskell2010
@@ -83,6 +85,7 @@ executable aoc-exe
     , base >=4.7 && <5
     , containers
     , data-ordlist
+    , mtl
     , parallel
     , time
   default-language: Haskell2010
@@ -100,6 +103,7 @@ test-suite aoc-test
     , base >=4.7 && <5
     , containers
     , data-ordlist
+    , mtl
     , parallel
     , time
   default-language: Haskell2010

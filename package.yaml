@@ -18,6 +18,7 @@ dependencies:
 - time
 - containers
 - data-ordlist
+- mtl
 
 library:
   source-dirs: src
