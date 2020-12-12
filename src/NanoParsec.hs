@@ -6,7 +6,6 @@ import Data.Char
 import Data.Functor (($>))
 import Control.Monad
 import Control.Applicative
-import Data.Bifunctor (first)
 
 newtype Parser a = Parser { parse :: String -> Maybe (a, String) }
 
@@ -41,7 +40,7 @@ bind x f = Parser $ \s -> case parse x s of
 
 
 instance Functor Parser where
-  fmap f p = Parser $ \s -> fmap (first f) (parse p s)
+  fmap f p = Parser $ parse p >=> \(x, s) -> Just (f x, s)
 
 
 instance Applicative Parser where

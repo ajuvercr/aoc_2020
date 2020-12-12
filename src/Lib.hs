@@ -1,5 +1,7 @@
 module Lib where
 
+import Debug.Trace
+
 
 printArray :: Show a => [a] -> IO ()
 printArray = foldMap print
@@ -39,3 +41,7 @@ fromLeft (Left x) = x
 
 fromRight :: Either a b -> b
 fromRight (Right x) = x
+
+
+printBefore :: Show a => (a -> b) -> a -> b
+printBefore f x = f $ (trace $ show x) x
