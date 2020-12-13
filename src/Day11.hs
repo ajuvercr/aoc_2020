@@ -15,6 +15,8 @@ import Control.Parallel.Strategies
 type Coord = (Int, Int)
 type AdjF = Coord -> [Coord]
 
+
+
 (a1, a2) `plus` (b1, b2) = (a1+b1, a2+b2)
 
 
