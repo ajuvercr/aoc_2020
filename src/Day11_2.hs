@@ -6,13 +6,7 @@ module Day11_2
 
 import DList
 import Lib
-import Data.Maybe
-import qualified Data.List
-import Data.List.Ordered
-import qualified Data.Map.Strict as M
--- import Data.Set (Set, empty, union, fromList, filter, difference, fromAscList)
-import Control.Parallel.Strategies
-import Debug.Trace
+
 type Coord = (Int, Int)
 -- type DDList a = DList (DList a)
 type AdjF = Coord -> [Coord]
@@ -24,7 +18,7 @@ type AdjF = Coord -> [Coord]
 
 
 dirs :: [Coord]
-dirs = [(1,0), (0,1), (-1,0), (0, -1), (1,1), (-1, -1), (1, -1), (-1,1)]
+dirs = [(-1,1), (0,1), (1,1), (-1, 0), (1,0), (-1, -1), (0, -1), (1,-1)]
 
 
 adjacent :: AdjF

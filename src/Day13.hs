@@ -2,16 +2,16 @@ module Day13
     (solve
     ) where
 
-import NanoParsec ( Parser, runParser, char, string, star, number )
-import Control.Applicative ( Alternative((<|>)) )
-import Data.Functor (($>))
 import Data.Maybe ( mapMaybe )
+import Util
+
 
 data Bus = Time Integer
          | X
          deriving (Show)
 
 
+-- Rosetta code
 modInv :: Integer -> Integer -> Integer
 modInv a m
   | 1 == g = mkPos i
@@ -36,11 +36,10 @@ step (g, o) (Time x) = (g * x, x * tok g x (o + 1))
     where tok x y o = (o * modInv y x) `mod` x
 
 
-parseBus :: Parser Bus
-parseBus = (time <|> none) <* (char ',' $> () <|> return ())
-    where
-        time = Time . toInteger <$> number
-        none = X <$ string "x"
+parseBus :: String -> Bus
+parseBus "x" = X
+parseBus  x = Time $ read x
+
 
 
 filterPart :: Integer -> Bus -> Maybe (Integer, Integer)
@@ -51,7 +50,7 @@ filterPart x (Time t) = Just (t - x `mod` t, t)
 type Prep = (Integer, [Bus])
 prepare :: String -> Prep
 prepare x = let h:hs:_ = lines x
-            in (read h, runParser (star parseBus) hs)
+            in (read h, map parseBus $ split ',' hs)
 
 
 part1 :: Prep -> IO ()

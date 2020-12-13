@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0db6eb43074358a327d6c9ec1fc1e642bb1b17bb8f12a40fc2bbb059e2de3aa3
+-- hash: 320c1df7531fdacfdc545594b732bb8e6e96d887b872658110dd44a610276ac8
 
 name:           aoc
 version:        0.20.20.0
@@ -71,6 +71,7 @@ library
       base >=4.7 && <5
     , containers
     , data-ordlist
+    , ghc
     , mtl
     , parallel
     , time
@@ -88,6 +89,7 @@ executable aoc-exe
     , base >=4.7 && <5
     , containers
     , data-ordlist
+    , ghc
     , mtl
     , parallel
     , time
@@ -106,6 +108,7 @@ test-suite aoc-test
     , base >=4.7 && <5
     , containers
     , data-ordlist
+    , ghc
     , mtl
     , parallel
     , time
