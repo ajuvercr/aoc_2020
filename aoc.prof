@@ -1,0 +1,150 @@
+	Sat Dec 12 18:30 2020 Time and Allocation Profiling Report  (Final)
+
+	   aoc +RTS -N -p -RTS res/11.txt 11 1
+
+	total time  =      225.23 secs   (834492 ticks @ 1000 us, 8 processors)
+	total alloc = 1,936,088,376 bytes  (excludes profiling overheads)
+
+COST CENTRE   MODULE                      SRC                                              %time %alloc
+
+memberBy.loop Data.List.Ordered           Data/List/Ordered.hs:(98,5)-(102,33)              99.0   45.9
+sim           Day11                       src/Day11.hs:(52,1)-(58,33)                        0.6   29.3
+memberBy      Data.List.Ordered           Data/List/Ordered.hs:(96,1)-(102,33)               0.1    5.6
+parEval       Control.Parallel.Strategies Control/Parallel/Strategies.hs:(513,1)-(518,28)    0.0    3.5
+rdeepseq      Control.Parallel.Strategies Control/Parallel/Strategies.hs:450:1-38            0.0    3.9
+parEval.r     Control.Parallel.Strategies Control/Parallel/Strategies.hs:518:5-28            0.0    2.9
+pmap          Day11                       src/Day11.hs:48:1-45                               0.0    4.9
+liftA2        Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:22-32           0.0    1.6
+
+
+                                                                                                                                    individual      inherited
+COST CENTRE                         MODULE                      SRC                                             no.      entries  %time %alloc   %time %alloc
+
+MAIN                                MAIN                        <built-in>                                       549          0    0.0    0.0   100.0  100.0
+ CAF                                GHC.Conc.Signal             <entire-module>                                  657          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.Encoding             <entire-module>                                  641          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.Encoding.Iconv       <entire-module>                                  639          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.Exception            <entire-module>                                  633          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.Handle.FD            <entire-module>                                  631          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.Handle.Internals     <entire-module>                                  630          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.Handle.Text          <entire-module>                                  629          0    0.0    0.0     0.0    0.0
+ CAF                                Text.Read.Lex               <entire-module>                                  594          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.Event.Thread            <entire-module>                                  588          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.FD                   <entire-module>                                  574          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.Event.Poll              <entire-module>                                  567          0    0.0    0.0     0.0    0.0
+ CAF:$fApplicativeEval3             Control.Parallel.Strategies <no location info>                               704          0    0.0    0.0     0.0    0.0
+  liftA2                            Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:22-32        1124          1    0.0    0.0     0.0    0.0
+ CAF:$fApplicativeEval5             Control.Parallel.Strategies <no location info>                               706          0    0.0    0.0     0.0    0.0
+  pure                              Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:22-32        1158          1    0.0    0.0     0.0    0.0
+ CAF:$fFunctorEval2                 Control.Parallel.Strategies <no location info>                               708          0    0.0    0.0     0.0    0.0
+  fmap                              Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:13-19        1134          1    0.0    0.0     0.0    0.0
+ CAF:$fMonadEval1                   Control.Parallel.Strategies <no location info>                               699          0    0.0    0.0     0.0    0.0
+  return                            Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:35-39        1132          1    0.0    0.0     0.0    0.0
+ CAF:$fMonadEval2                   Control.Parallel.Strategies <no location info>                               700          0    0.0    0.0     0.0    0.0
+  >>                                Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:35-39        1136          1    0.0    0.0     0.0    0.0
+ CAF:$fMonadEval3                   Control.Parallel.Strategies <no location info>                               701          0    0.0    0.0     0.0    0.0
+  >>=                               Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:35-39        1129          1    0.0    0.0     0.0    0.0
+ CAF:dirs                           Day11                       src/Day11.hs:22:1-4                              854          0    0.0    0.0     0.0    0.0
+  dirs                              Day11                       src/Day11.hs:22:1-72                            1151          1    0.0    0.0     0.0    0.0
+ CAF:lvl7_r81M                      Main                        <no location info>                              1094          0    0.0    0.0     0.0    0.0
+  parse                             Main                        app/Main.hs:(47,1)-(50,75)                      1104          0    0.0    0.0     0.0    0.0
+ CAF:main1                          Main                        <no location info>                              1096          0    0.0    0.0     0.0    0.0
+  main                              Main                        app/Main.hs:71:1-43                             1098          1    0.0    0.0     0.0    0.0
+ CAF:parList                        Control.Parallel.Strategies Control/Parallel/Strategies.hs:552:1-7           722          0    0.0    0.0     0.0    0.0
+  parList                           Control.Parallel.Strategies Control/Parallel/Strategies.hs:552:1-24         1119          1    0.0    0.0     0.0    0.0
+ CAF:poly_z_rbEq                    Control.Parallel.Strategies <no location info>                               721          0    0.0    0.0     0.0    0.0
+ CAF:prepare                        Day11                       src/Day11.hs:77:1-7                              851          0    0.0    0.0     0.0    0.0
+  prepare                           Day11                       src/Day11.hs:77:1-27                            1120          1    0.0    0.0     0.0    0.0
+ CAF:readfile2                      Main                        <no location info>                              1090          0    0.0    0.0     0.0    0.0
+ CAF:runEval                        Control.Parallel.Strategies Control/Parallel/Strategies.hs:219:1-7           709          0    0.0    0.0     0.0    0.0
+  runEval                           Control.Parallel.Strategies Control/Parallel/Strategies.hs:219:1-42         1114          1    0.0    0.0     0.0    0.0
+ CAF:solve29                        Day11                       <no location info>                               853          0    0.0    0.0     0.0    0.0
+ CAF:solve4                         Day11                       <no location info>                               856          0    0.0    0.0     0.0    0.0
+  sim                               Day11                       src/Day11.hs:(52,1)-(58,33)                     1160          0    0.0    0.0     0.0    0.0
+   sim.getFilter                    Day11                       src/Day11.hs:(55,9)-(57,50)                     1161          0    0.0    0.0     0.0    0.0
+    toMaybe                         Day11                       src/Day11.hs:(44,1)-(45,25)                     1162          1    0.0    0.0     0.0    0.0
+ CAF:solve_strat                    Day11                       <no location info>                               855          0    0.0    0.0     0.0    0.0
+  sim                               Day11                       src/Day11.hs:(52,1)-(58,33)                     1117          0    0.0    0.0     0.0    0.0
+   pmap                             Day11                       src/Day11.hs:48:1-45                            1118          0    0.0    0.0     0.0    0.0
+    rparWith                        Control.Parallel.Strategies Control/Parallel/Strategies.hs:494:1-32         1126          1    0.0    0.0     0.0    0.0
+ main                               Main                        app/Main.hs:71:1-43                             1099          0    0.0    0.0   100.0  100.0
+  parse                             Main                        app/Main.hs:(47,1)-(50,75)                      1100          1    0.0    0.0     0.0    0.0
+   readfile                         Main                        app/Main.hs:(60,1)-(63,83)                      1101          1    0.0    0.0     0.0    0.0
+  uncurry3                          Main                        app/Main.hs:67:1-29                             1102          1    0.0    0.0   100.0  100.0
+   solve                            Main                        app/Main.hs:(75,1)-(87,22)                      1103          1    0.0    0.0   100.0  100.0
+    solve                           Day11                       src/Day11.hs:(94,1)-(97,26)                     1105          1    0.0    0.0   100.0  100.0
+     part1                          Day11                       src/Day11.hs:(80,1)-(83,31)                     1106          1    0.0    0.0   100.0   99.6
+      run                           Day11                       src/Day11.hs:(62,1)-(65,18)                     1108         70    0.0    0.0   100.0   98.9
+       run.a'                       Day11                       src/Day11.hs:65:11-18                           1109         70    0.0    0.0   100.0   98.9
+        part1.r                     Day11                       src/Day11.hs:83:9-31                            1110          0    0.0    0.0   100.0   98.9
+         sim                        Day11                       src/Day11.hs:(52,1)-(58,33)                     1111         70    0.6   29.3    99.9   98.9
+          sim.isocc                 Day11                       src/Day11.hs:54:9-23                            1141         71    0.0    0.0     0.0    0.0
+          pmap                      Day11                       src/Day11.hs:48:1-45                            1112         70    0.0    4.9    99.4   69.6
+           sim.getFilter            Day11                       src/Day11.hs:(55,9)-(57,50)                     1140     507104    0.0    0.1    99.2   52.1
+            sim.c                   Day11                       src/Day11.hs:58:9-33                            1146     506734    0.0    0.0    89.0    6.7
+             count                  Lib                         src/Lib.hs:36:1-27                              1152     506622    0.1    0.4    89.0    6.7
+              sim.isocc             Day11                       src/Day11.hs:54:9-23                            1153          0    0.0    0.0    88.9    6.3
+               has                  Data.List.Ordered           Data/List/Ordered.hs:108:1-32                   1154    4007633    0.0    0.0    88.9    6.3
+                memberBy            Data.List.Ordered           Data/List/Ordered.hs:(96,1)-(102,33)            1155    4007019    0.0    5.0    88.9    6.3
+                 memberBy.loop      Data.List.Ordered           Data/List/Ordered.hs:(98,5)-(102,33)            1156 1826306911   88.8    1.3    88.8    1.3
+              using                 Control.Parallel.Strategies Control/Parallel/Strategies.hs:338:1-35         1196          0    0.0    0.0     0.0    0.0
+               runEval              Control.Parallel.Strategies Control/Parallel/Strategies.hs:219:1-42         1197          0    0.0    0.0     0.0    0.0
+                liftA2              Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:22-32        1198          0    0.0    0.0     0.0    0.0
+                 rparWith           Control.Parallel.Strategies Control/Parallel/Strategies.hs:494:1-32         1199          0    0.0    0.0     0.0    0.0
+                  rdeepseq          Control.Parallel.Strategies Control/Parallel/Strategies.hs:450:1-38         1200          0    0.0    0.0     0.0    0.0
+                   sim.isocc        Day11                       src/Day11.hs:54:9-23                            1201          0    0.0    0.0     0.0    0.0
+                    has             Data.List.Ordered           Data/List/Ordered.hs:108:1-32                   1202          1    0.0    0.0     0.0    0.0
+                     memberBy       Data.List.Ordered           Data/List/Ordered.hs:(96,1)-(102,33)            1203          1    0.0    0.0     0.0    0.0
+                      memberBy.loop Data.List.Ordered           Data/List/Ordered.hs:(98,5)-(102,33)            1204       2319    0.0    0.0     0.0    0.0
+            toMaybe                 Day11                       src/Day11.hs:(44,1)-(45,25)                     1159     244983    0.0    0.1     0.0    0.1
+            sim.isocc               Day11                       src/Day11.hs:54:9-23                            1142          0    0.0    0.0    10.2   45.2
+             has                    Data.List.Ordered           Data/List/Ordered.hs:108:1-32                   1143     506721    0.0    0.0    10.2   45.2
+              memberBy              Data.List.Ordered           Data/List/Ordered.hs:(96,1)-(102,33)            1144     506449    0.0    0.6    10.2   45.2
+               memberBy.loop        Data.List.Ordered           Data/List/Ordered.hs:(98,5)-(102,33)            1145  506392264   10.2   44.6    10.2   44.6
+           using                    Control.Parallel.Strategies Control/Parallel/Strategies.hs:338:1-35         1113         70    0.0    0.0     0.1    7.2
+            runEval                 Control.Parallel.Strategies Control/Parallel/Strategies.hs:219:1-42         1115          0    0.0    0.0     0.1    7.2
+             unEval_                Control.Parallel.Strategies Control/Parallel/Strategies.hs:210:24-30        1116     508003    0.0    0.0     0.0    0.0
+             liftA2                 Control.Parallel.Strategies Control/Parallel/Strategies.hs:211:22-32        1125          0    0.0    1.6     0.1    7.2
+              rparWith              Control.Parallel.Strategies Control/Parallel/Strategies.hs:494:1-32         1130          0    0.0    0.0     0.1    5.6
+               parEval              Control.Parallel.Strategies Control/Parallel/Strategies.hs:(513,1)-(518,28) 1131          0    0.0    2.1     0.1    5.0
+                parEval.r           Control.Parallel.Strategies Control/Parallel/Strategies.hs:518:5-28         1133     508774    0.0    2.9     0.0    2.9
+                 rdeepseq           Control.Parallel.Strategies Control/Parallel/Strategies.hs:450:1-38         1163          5    0.0    0.0     0.0    0.0
+                  rseq              Control.Parallel.Strategies Control/Parallel/Strategies.hs:429:1-26         1187          5    0.0    0.0     0.0    0.0
+               rdeepseq             Control.Parallel.Strategies Control/Parallel/Strategies.hs:450:1-38         1137          0    0.0    0.6     0.0    0.6
+                sim.getFilter       Day11                       src/Day11.hs:(55,9)-(57,50)                     1174          7    0.0    0.0     0.0    0.0
+                 sim.c              Day11                       src/Day11.hs:58:9-33                            1179          7    0.0    0.0     0.0    0.0
+                  count             Lib                         src/Lib.hs:36:1-27                              1180          7    0.0    0.0     0.0    0.0
+                   sim.isocc        Day11                       src/Day11.hs:54:9-23                            1181          0    0.0    0.0     0.0    0.0
+                    has             Data.List.Ordered           Data/List/Ordered.hs:108:1-32                   1182         56    0.0    0.0     0.0    0.0
+                     memberBy       Data.List.Ordered           Data/List/Ordered.hs:(96,1)-(102,33)            1183         56    0.0    0.0     0.0    0.0
+                      memberBy.loop Data.List.Ordered           Data/List/Ordered.hs:(98,5)-(102,33)            1184     113067    0.0    0.0     0.0    0.0
+                 toMaybe            Day11                       src/Day11.hs:(44,1)-(45,25)                     1191          1    0.0    0.0     0.0    0.0
+                 sim.isocc          Day11                       src/Day11.hs:54:9-23                            1175          0    0.0    0.0     0.0    0.0
+                  has               Data.List.Ordered           Data/List/Ordered.hs:108:1-32                   1176          7    0.0    0.0     0.0    0.0
+                   memberBy         Data.List.Ordered           Data/List/Ordered.hs:(96,1)-(102,33)            1177          7    0.0    0.0     0.0    0.0
+                    memberBy.loop   Data.List.Ordered           Data/List/Ordered.hs:(98,5)-(102,33)            1178      73211    0.0    0.0     0.0    0.0
+                has                 Data.List.Ordered           Data/List/Ordered.hs:108:1-32                   1205          1    0.0    0.0     0.0    0.0
+                 memberBy           Data.List.Ordered           Data/List/Ordered.hs:(96,1)-(102,33)            1206          1    0.0    0.0     0.0    0.0
+                  memberBy.loop     Data.List.Ordered           Data/List/Ordered.hs:(98,5)-(102,33)            1207       2031    0.0    0.0     0.0    0.0
+                parEval             Control.Parallel.Strategies Control/Parallel/Strategies.hs:(513,1)-(518,28) 1185          0    0.0    0.0     0.0    0.0
+                 parEval.r          Control.Parallel.Strategies Control/Parallel/Strategies.hs:518:5-28         1186          0    0.0    0.0     0.0    0.0
+                rseq                Control.Parallel.Strategies Control/Parallel/Strategies.hs:429:1-26         1139          0    0.0    0.0     0.0    0.0
+                sim.isocc           Day11                       src/Day11.hs:54:9-23                            1192          0    0.0    0.0     0.0    0.0
+                 has                Data.List.Ordered           Data/List/Ordered.hs:108:1-32                   1193          1    0.0    0.0     0.0    0.0
+                  memberBy          Data.List.Ordered           Data/List/Ordered.hs:(96,1)-(102,33)            1194          1    0.0    0.0     0.0    0.0
+                   memberBy.loop    Data.List.Ordered           Data/List/Ordered.hs:(98,5)-(102,33)            1195       3548    0.0    0.0     0.0    0.0
+             rparWith               Control.Parallel.Strategies Control/Parallel/Strategies.hs:494:1-32         1188          0    0.0    0.0     0.0    0.0
+              rdeepseq              Control.Parallel.Strategies Control/Parallel/Strategies.hs:450:1-38         1189          0    0.0    0.0     0.0    0.0
+           rparWith                 Control.Parallel.Strategies Control/Parallel/Strategies.hs:494:1-32         1127          0    0.0    0.8     0.0    5.5
+            parEval                 Control.Parallel.Strategies Control/Parallel/Strategies.hs:(513,1)-(518,28) 1128     472010    0.0    1.4     0.0    1.4
+            rdeepseq                Control.Parallel.Strategies Control/Parallel/Strategies.hs:450:1-38         1135     470805    0.0    3.3     0.0    3.3
+             rseq                   Control.Parallel.Strategies Control/Parallel/Strategies.hs:429:1-26         1138     471159    0.0    0.0     0.0    0.0
+      part1.m                       Day11                       src/Day11.hs:82:9-35                            1147          1    0.0    0.0     0.0    0.7
+       buildAdj                     Day11                       src/Day11.hs:(26,1)-(27,24)                     1148          1    0.0    0.1     0.0    0.7
+        buildAdj.b                  Day11                       src/Day11.hs:27:11-24                           1149       6743    0.0    0.0     0.0    0.6
+         adjacent                   Day11                       src/Day11.hs:31:1-33                            1150       6743    0.0    0.3     0.0    0.6
+          plus                      Day11                       src/Day11.hs:18:1-41                            1157      53894    0.0    0.3     0.0    0.3
+      part1.r                       Day11                       src/Day11.hs:83:9-31                            1107          1    0.0    0.0     0.0    0.0
+     prepare                        Day11                       src/Day11.hs:77:1-27                            1121          0    0.0    0.1     0.0    0.4
+      getcoords                     Day11                       src/Day11.hs:(70,1)-(73,94)                     1122          1    0.0    0.3     0.0    0.3
+       getcoords.getcoords'         Day11                       src/Day11.hs:(72,9)-(73,94)                     1123         91    0.0    0.0     0.0    0.0
