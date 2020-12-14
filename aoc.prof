@@ -1,29 +1,29 @@
-	Sun Dec 13 14:25 2020 Time and Allocation Profiling Report  (Final)
+	Sun Dec 13 14:29 2020 Time and Allocation Profiling Report  (Final)
 
 	   aoc +RTS -N -p -RTS
 
-	total time  =        0.00 secs   (0 ticks @ 1000 us, 12 processors)
-	total alloc =     430,696 bytes  (excludes profiling overheads)
+	total time  =        0.00 secs   (4 ticks @ 1000 us, 12 processors)
+	total alloc =     428,176 bytes  (excludes profiling overheads)
 
 COST CENTRE   MODULE           SRC                          %time %alloc
 
-MAIN          MAIN             <built-in>                     0.0   44.3
+MAIN          MAIN             <built-in>                   100.0   44.8
 CAF           GHC.IO.Handle.FD <entire-module>                0.0    8.1
-step          Day13            src/Day13.hs:(36,1)-(38,46)    0.0    1.4
-prepare.(...) Day13            src/Day13.hs:59:17-32          0.0    5.0
-prepare       Day13            src/Day13.hs:(59,1)-(60,52)    0.0    6.5
-part1         Day13            src/Day13.hs:64:1-127          0.0    2.6
-parseBus      Day13            src/Day13.hs:(42,1)-(43,27)    0.0    7.9
-gcdExt.(...)  Day13            src/Day13.hs:31:7-28           0.0    1.3
-gcdExt.(...)  Day13            src/Day13.hs:30:7-28           0.0    1.7
-gcdExt        Day13            src/Day13.hs:(28,1)-(32,22)    0.0   10.8
+step          Day13            src/Day13.hs:(34,1)-(36,46)    0.0    1.2
+prepare.(...) Day13            src/Day13.hs:52:17-32          0.0    5.0
+prepare       Day13            src/Day13.hs:(52,1)-(53,52)    0.0    6.5
+part1         Day13            src/Day13.hs:57:1-127          0.0    2.6
+parseBus      Day13            src/Day13.hs:(40,1)-(41,27)    0.0    8.0
+gcdExt.(...)  Day13            src/Day13.hs:29:7-28           0.0    1.3
+gcdExt.(...)  Day13            src/Day13.hs:28:7-28           0.0    1.7
+gcdExt        Day13            src/Day13.hs:(26,1)-(30,22)    0.0   10.8
 readfile      Main             app/Main.hs:(61,1)-(64,83)     0.0    6.3
 
 
                                                                                                individual      inherited
 COST CENTRE              MODULE                SRC                         no.      entries  %time %alloc   %time %alloc
 
-MAIN                     MAIN                  <built-in>                   583          0    0.0   44.3     0.0  100.0
+MAIN                     MAIN                  <built-in>                   583          0  100.0   44.8   100.0  100.0
  CAF                     GHC.Conc.Signal       <entire-module>              689          0    0.0    0.2     0.0    0.2
  CAF                     GHC.IO.Encoding       <entire-module>              673          0    0.0    0.7     0.0    0.7
  CAF                     GHC.IO.Encoding.Iconv <entire-module>              671          0    0.0    0.0     0.0    0.0
@@ -38,48 +38,48 @@ MAIN                     MAIN                  <built-in>                   583 
  CAF:dayFileLocation2    Main                  <no location info>          1157          0    0.0    0.1     0.0    0.1
  CAF:dayofmonth1         Main                  <no location info>          1155          0    0.0    0.0     0.0    0.0
   dayofmonth             Main                  app/Main.hs:34:1-28         1169          1    0.0    0.0     0.0    0.0
+ CAF:lvl5_rawH           Day13                 <no location info>           899          0    0.0    0.1     0.0    0.1
  CAF:main1               Main                  <no location info>          1164          0    0.0    0.0     0.0    0.0
   main                   Main                  app/Main.hs:72:1-43         1166          1    0.0    0.0     0.0    0.0
  CAF:solve10             Day13                 <no location info>           894          0    0.0    0.0     0.0    0.0
-  prepare                Day13                 src/Day13.hs:(59,1)-(60,52) 1188          0    0.0    0.0     0.0    0.0
- CAF:solve14             Day13                 <no location info>           899          0    0.0    0.1     0.0    0.1
- CAF:solve16             Day13                 <no location info>           897          0    0.0    0.1     0.0    0.1
+  prepare                Day13                 src/Day13.hs:(52,1)-(53,52) 1188          0    0.0    0.0     0.0    0.0
+ CAF:solve13             Day13                 <no location info>           897          0    0.0    0.1     0.0    0.1
  CAF:solve3              Day13                 <no location info>           890          0    0.0    0.0     0.0    0.0
-  parseBus               Day13                 src/Day13.hs:(42,1)-(43,27) 1187          0    0.0    0.0     0.0    0.0
- main                    Main                  app/Main.hs:72:1-43         1167          0    0.0    0.0     0.0   45.8
-  parse                  Main                  app/Main.hs:(48,1)-(51,75)  1168          1    0.0    0.0     0.0    6.7
+  parseBus               Day13                 src/Day13.hs:(40,1)-(41,27) 1187          0    0.0    0.0     0.0    0.0
+ main                    Main                  app/Main.hs:72:1-43         1167          0    0.0    0.0     0.0   45.2
+  parse                  Main                  app/Main.hs:(48,1)-(51,75)  1168          1    0.0    0.0     0.0    6.8
    parse.\               Main                  app/Main.hs:51:35-75        1173          1    0.0    0.0     0.0    6.4
     readfile             Main                  app/Main.hs:(61,1)-(64,83)  1174          1    0.0    6.3     0.0    6.4
      dayFileLocation     Main                  app/Main.hs:(55,1)-(57,46)  1176          1    0.0    0.1     0.0    0.1
    dayofmonth            Main                  app/Main.hs:34:1-28         1170          0    0.0    0.0     0.0    0.3
     thdOf3               Main                  app/Main.hs:26:1-20         1175          1    0.0    0.0     0.0    0.0
     date                 Main                  app/Main.hs:30:1-47         1172          0    0.0    0.3     0.0    0.3
-  uncurry3               Main                  app/Main.hs:68:1-29         1177          1    0.0    0.0     0.0   39.0
-   solve                 Main                  app/Main.hs:(76,1)-(89,22)  1178          1    0.0    0.0     0.0   39.0
-    solve                Day13                 src/Day13.hs:(75,1)-(78,26) 1179          1    0.0    0.0     0.0   39.0
-     part1               Day13                 src/Day13.hs:64:1-127       1182          1    0.0    2.6     0.0    2.6
-      filterPart         Day13                 src/Day13.hs:(53,1)-(54,47) 1185         74    0.0    0.1     0.0    0.1
-     part2               Day13                 src/Day13.hs:(68,1)-(71,52) 1190          1    0.0    0.8     0.0   17.0
-      part2.l            Day13                 src/Day13.hs:70:9-37        1191          1    0.0    0.0     0.0    0.0
-      part2.sol          Day13                 src/Day13.hs:71:9-52        1192          1    0.0    0.2     0.0   16.3
-       step              Day13                 src/Day13.hs:(36,1)-(38,46) 1193        139    0.0    1.4     0.0   16.1
-        step.tok         Day13                 src/Day13.hs:38:11-46       1194         74    0.0    0.3     0.0   14.7
-         modInv          Day13                 src/Day13.hs:(18,1)-(24,21) 1195         74    0.0    0.0     0.0   14.4
-          modInv.(...)   Day13                 src/Day13.hs:21:5-26        1196         74    0.0    0.5     0.0   14.4
-           gcdExt        Day13                 src/Day13.hs:(28,1)-(32,22) 1197        249    0.0   10.8     0.0   13.8
-            gcdExt.(...) Day13                 src/Day13.hs:31:7-28        1202        175    0.0    1.3     0.0    1.3
-            gcdExt.(...) Day13                 src/Day13.hs:30:7-28        1201        175    0.0    1.7     0.0    1.7
-            gcdExt.g     Day13                 src/Day13.hs:31:7-28        1199        175    0.0    0.0     0.0    0.0
-            gcdExt.r     Day13                 src/Day13.hs:30:7-28        1200        175    0.0    0.0     0.0    0.0
-            gcdExt.t     Day13                 src/Day13.hs:31:7-28        1205        175    0.0    0.0     0.0    0.0
-            gcdExt.q     Day13                 src/Day13.hs:30:7-28        1206        101    0.0    0.0     0.0    0.0
-            gcdExt.s     Day13                 src/Day13.hs:31:7-28        1207        101    0.0    0.0     0.0    0.0
-          modInv.g       Day13                 src/Day13.hs:21:5-26        1198         74    0.0    0.0     0.0    0.0
-          modInv.i       Day13                 src/Day13.hs:21:5-26        1203         74    0.0    0.0     0.0    0.0
-          modInv.mkPos   Day13                 src/Day13.hs:(22,5)-(24,21) 1204         74    0.0    0.0     0.0    0.0
-     solve.prep          Day13                 src/Day13.hs:78:11-26       1180          1    0.0    0.0     0.0   19.4
-      prepare            Day13                 src/Day13.hs:(59,1)-(60,52) 1181          1    0.0    6.5     0.0   19.3
-       parseBus          Day13                 src/Day13.hs:(42,1)-(43,27) 1186         74    0.0    7.9     0.0    7.9
-       prepare.(...)     Day13                 src/Day13.hs:59:17-32       1184          1    0.0    5.0     0.0    5.0
-       prepare.h         Day13                 src/Day13.hs:59:17-32       1189          1    0.0    0.0     0.0    0.0
-       prepare.hs        Day13                 src/Day13.hs:59:17-32       1183          1    0.0    0.0     0.0    0.0
+  uncurry3               Main                  app/Main.hs:68:1-29         1177          1    0.0    0.0     0.0   38.5
+   solve                 Main                  app/Main.hs:(76,1)-(89,22)  1178          1    0.0    0.0     0.0   38.4
+    solve                Day13                 src/Day13.hs:(68,1)-(71,26) 1179          1    0.0    0.0     0.0   38.4
+     part1               Day13                 src/Day13.hs:57:1-127       1182          1    0.0    2.6     0.0    2.7
+      filterPart         Day13                 src/Day13.hs:(46,1)-(47,47) 1185         74    0.0    0.1     0.0    0.1
+     part2               Day13                 src/Day13.hs:(61,1)-(64,52) 1190          1    0.0    0.8     0.0   16.3
+      part2.l            Day13                 src/Day13.hs:63:9-37        1191          1    0.0    0.0     0.0    0.0
+      part2.sol          Day13                 src/Day13.hs:64:9-52        1192          1    0.0    0.1     0.0   15.5
+       step              Day13                 src/Day13.hs:(34,1)-(36,46) 1193        139    0.0    1.2     0.0   15.5
+        step.tok         Day13                 src/Day13.hs:36:11-46       1194         74    0.0    0.3     0.0   14.3
+         modInv          Day13                 src/Day13.hs:(16,1)-(22,21) 1195         74    0.0    0.0     0.0   14.0
+          modInv.(...)   Day13                 src/Day13.hs:19:5-26        1196         74    0.0    0.1     0.0   14.0
+           gcdExt        Day13                 src/Day13.hs:(26,1)-(30,22) 1197        249    0.0   10.8     0.0   13.9
+            gcdExt.(...) Day13                 src/Day13.hs:29:7-28        1202        175    0.0    1.3     0.0    1.3
+            gcdExt.(...) Day13                 src/Day13.hs:28:7-28        1201        175    0.0    1.7     0.0    1.7
+            gcdExt.g     Day13                 src/Day13.hs:29:7-28        1199        175    0.0    0.0     0.0    0.0
+            gcdExt.r     Day13                 src/Day13.hs:28:7-28        1200        175    0.0    0.0     0.0    0.0
+            gcdExt.t     Day13                 src/Day13.hs:29:7-28        1205        175    0.0    0.0     0.0    0.0
+            gcdExt.q     Day13                 src/Day13.hs:28:7-28        1206        101    0.0    0.0     0.0    0.0
+            gcdExt.s     Day13                 src/Day13.hs:29:7-28        1207        101    0.0    0.0     0.0    0.0
+          modInv.g       Day13                 src/Day13.hs:19:5-26        1198         74    0.0    0.0     0.0    0.0
+          modInv.i       Day13                 src/Day13.hs:19:5-26        1203         74    0.0    0.0     0.0    0.0
+          modInv.mkPos   Day13                 src/Day13.hs:(20,5)-(22,21) 1204         74    0.0    0.0     0.0    0.0
+     solve.prep          Day13                 src/Day13.hs:71:11-26       1180          1    0.0    0.0     0.0   19.5
+      prepare            Day13                 src/Day13.hs:(52,1)-(53,52) 1181          1    0.0    6.5     0.0   19.5
+       parseBus          Day13                 src/Day13.hs:(40,1)-(41,27) 1186         74    0.0    7.9     0.0    7.9
+       prepare.(...)     Day13                 src/Day13.hs:52:17-32       1184          1    0.0    5.0     0.0    5.0
+       prepare.h         Day13                 src/Day13.hs:52:17-32       1189          1    0.0    0.0     0.0    0.0
+       prepare.hs        Day13                 src/Day13.hs:52:17-32       1183          1    0.0    0.0     0.0    0.0
