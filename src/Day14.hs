@@ -45,7 +45,7 @@ tobitstring x = show d ++ tobitstring rest
 
 
 tomask :: Int -> Mask2
-tomask x = r ++ replicate (36 - l) '0'
+tomask x = replicate (36 - l) '0' ++ reverse r
     where
         r = tobitstring x
         l = length r
@@ -65,12 +65,12 @@ other '1' = '0'
 
 
 applyMask :: Mask2 -> Mask2 -> Maybe Mask2
-applyMask [] [] = Nothing
+applyMask [] [] = Nothing       -- Base case bad, you matched with the mask
 applyMask (x:xs) (m:ms)
-    | m == 'X'  = (x:) <$> applyMask xs ms
-    | x == 'X'  = (('X':) <$> applyMask xs ms) `orElse'` (other m:xs)
     | x == m    = (x:) <$> applyMask xs ms
-    | otherwise = Just (x:xs)
+    | m == 'X'  = (x:) <$> applyMask xs ms
+    | x == 'X'  = Just ((('X':) <$> applyMask xs ms) `orElse` (other m:xs)) -- Good case
+    | otherwise = Just (x:xs)   -- Base case good, you were different from this mask
 
 
 applyMasks :: [Mask2] -> Mask2 -> Maybe Mask2
@@ -84,6 +84,11 @@ dopart2' m (k, v) (s, ms) = newMask `orElse` (s, ms)
         mask = withMask (tomask k) m
         domask m = (s + (2 ^ count (=='X') m) * v, m:ms)
         newMask = domask <$> applyMasks (reverse ms) mask
+
+
+dopart2 :: [Mask] -> (Int, [Mask2])
+dopart2 [] = (0, [])
+dopart2 (((_, _, mask), mses):ms) = foldr (dopart2' mask) (dopart2 ms) (reverse mses)
 
 
 domasks :: Mask2 -> [Mask2]
@@ -100,11 +105,6 @@ dopart2'' mask m (k, v) = install m (domasks k'')
         k'' = withMask (tomask k) mask
         install s [] = s
         install s (x:xs) = M.insert (toDec x) v (install s xs)
-
-
-dopart2 :: [Mask] -> (Int, [Mask2])
-dopart2 [] = (0, [])
-dopart2 (((_, _, mask), mses):ms) = foldr (dopart2' mask) (dopart2 ms) (reverse mses)
 
 
 dopart22 :: M.Map Int Int -> Mask -> M.Map Int Int
@@ -132,7 +132,7 @@ parseMask = do
     v <- reverse <$> strAll
     spaces
     xs <- plus parseStore
-    return ((toint (=='1') v, complement (toint (=='0') v), v), xs)
+    return ((toint (=='1') v, complement (toint (=='0') v), reverse v), xs)
 
 
 doStep :: M.Map Int Int -> Mask -> M.Map Int Int
@@ -152,10 +152,11 @@ part1 x = putStr "Part 1: " >> print (sum (M.elems sol))
     where sol = Prelude.foldl doStep M.empty x
 
 
-part2 :: Prep -> IO ()
-part2 x = putStr "Part 2: " >> print (sum (M.elems sol))
-    where sol = foldl dopart22 M.empty x
 
+part2 :: Prep -> IO ()
+part2 x = putStr "Part 2: " >> print (fst (dopart2 $ reverse x))
+-- part2 x = putStr "Part 2: " >> print (sum (M.elems sol))
+--     where sol = foldl dopart22 M.empty x
 
 
 solve :: Maybe Int -> String -> IO ()
