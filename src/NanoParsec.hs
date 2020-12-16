@@ -40,7 +40,8 @@ bind x f = Parser $ \s -> case parse x s of
 
 
 instance Functor Parser where
-  fmap f p = Parser $ parse p >=> \(x, s) -> Just (f x, s)
+  fmap f p = Parser $ fmap (\(x, s) -> (f x, s)) . parse p
+  -- fmap f p = Parser $ parse p >=> \(x, s) -> Just (f x, s)
 
 
 instance Applicative Parser where

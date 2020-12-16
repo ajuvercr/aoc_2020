@@ -15,15 +15,8 @@ import Data.Char (digitToInt)
 import Data.List (foldl')
 
 type Mask = ((Int, Int, Mask2), [(Int, Int)])
-
-
-data Action = Store Int Int
-            | Mask Mask
-
-
 type Mask2 = String
 
-newtype Masker = Masker { valid :: Mask2 -> (Int, Mask2) }
 
 toDec :: String -> Int
 toDec = foldl' (\acc x -> acc * 2 + digitToInt x) 0
@@ -75,7 +68,12 @@ applyMask (x:xs) (m:ms)
 
 applyMasks :: [Mask2] -> Mask2 -> Maybe Mask2
 applyMasks [] x = Just x
-applyMasks (m:ms) x = applyMask x m >>= applyMasks ms
+applyMasks (m:ms) x = applyMasks ms m >>= applyMask x
+
+
+applyMasks' :: [Mask2] -> Mask2 -> Maybe Mask2
+applyMasks' f m = trace (m++" "++show f ++": "++ show sol) sol
+    where sol = applyMasks f m
 
 
 dopart2' :: Mask2 -> (Int, Int) -> (Int, [Mask2]) -> (Int, [Mask2])
@@ -83,12 +81,12 @@ dopart2' m (k, v) (s, ms) = newMask `orElse` (s, ms)
     where
         mask = withMask (tomask k) m
         domask m = (s + (2 ^ count (=='X') m) * v, m:ms)
-        newMask = domask <$> applyMasks (reverse ms) mask
+        newMask = domask <$> applyMasks' (reverse ms) mask
 
 
 dopart2 :: [Mask] -> (Int, [Mask2])
 dopart2 [] = (0, [])
-dopart2 (((_, _, mask), mses):ms) = foldr (dopart2' mask) (dopart2 ms) (reverse mses)
+dopart2 (((_, _, mask), mses):ms) = foldr (dopart2' mask) (dopart2 ms) mses
 
 
 domasks :: Mask2 -> [Mask2]
@@ -154,7 +152,7 @@ part1 x = putStr "Part 1: " >> print (sum (M.elems sol))
 
 
 part2 :: Prep -> IO ()
-part2 x = putStr "Part 2: " >> print (fst (dopart2 $ reverse x))
+part2 x = putStr "Part 2: " >> print (fst (dopart2 x))
 -- part2 x = putStr "Part 2: " >> print (sum (M.elems sol))
 --     where sol = foldl dopart22 M.empty x
 
