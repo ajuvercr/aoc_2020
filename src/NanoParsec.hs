@@ -155,3 +155,9 @@ number = read <$> liftM2 (:) (char '-' <|> (char '+' >> return ' ') <|> return '
 -- |Parse a something inside parentheses
 parens :: Parser a -> Parser a
 parens m = reserved "(" *> m <* reserved ")"
+
+
+delimitered :: String -> Parser a -> Parser [a]
+delimitered del p = do
+  a <- p
+  (reserved del >> (a:) <$> delimitered del p) <|> return [a]
