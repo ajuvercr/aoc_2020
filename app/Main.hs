@@ -23,6 +23,7 @@ import qualified Day13
 import qualified Day14
 import qualified Day15
 import qualified Day16
+import qualified Day17
 import qualified Day12
 
 thdOf3 :: (a, b, c) -> c
@@ -93,3 +94,4 @@ solve 13 = Day13.solve
 solve 14 = Day14.solve
 solve 15 = Day15.solve
 solve 16 = Day16.solve
+solve 17 = Day17.solve
