@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bb5e711b6a221962a96e189d8a689e34c8a34cd4dbbd779981160aec40882b29
+-- hash: 677951aad6cd81e72f9abf3b33f297bc6e15e95e56389456701f43ed27f9a419
 
 name:           aoc
 version:        0.20.20.0
@@ -44,6 +44,7 @@ extra-source-files:
     res/16.txt
     res/16_test.txt
     res/17.txt
+    res/17_test.txt
 
 source-repository head
   type: git
@@ -78,7 +79,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      MemoTrie
+    , base >=4.7 && <5
     , bv
     , containers
     , data-ordlist
@@ -96,7 +98,8 @@ executable aoc-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aoc
+      MemoTrie
+    , aoc
     , base >=4.7 && <5
     , bv
     , containers
@@ -116,7 +119,8 @@ test-suite aoc-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aoc
+      MemoTrie
+    , aoc
     , base >=4.7 && <5
     , bv
     , containers
