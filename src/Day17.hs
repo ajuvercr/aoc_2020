@@ -9,11 +9,49 @@ import Debug.Trace
 
 -- Inspired by https://www.47deg.com/blog/game-of-life-haskell/
 
+newtype Point3 = P3 (Int, Int, Int) deriving(Eq, Ord, Show)
+newtype Point4 = P4 (Int, Int, Int, Int) deriving(Eq, Ord, Show)
+
 type Point = [Int]
+
 data Cell = Alive | Dead deriving(Eq, Show)
-type Grid = Point -> Cell
+
+type Grid a = M.Map a Cell
 
 
+class Ord a => Coord a where
+  neighbours              :: a -> [a]
+  inbounds                :: Int -> a -> Bool
+  purify                  :: a -> a
+  shouldPurify            :: a -> Bool
+  worth                   :: a -> Int
+
+
+instance Coord Point3 where
+  neighbours (P3 (x, y, z))     = [P3 (x+m, y+n, z+o) | m <- [-1,0,1], n <- [-1,0,1], o <- [-1,0,1], (m,n,o) /= (0,0,0)]
+  inbounds level (P3 (x, y, z)) = (level * 3) > abs x + abs y + abs z - 16
+  purify (P3 (a, b, c))         = P3 (a, b, abs c)
+  shouldPurify (P3 (_, _, a))   = a < 0
+  worth (P3 (_, _, a))          = if' (a>0) 2 1
+
+
+point3All :: [Point3]
+point3All = [P3 (x, y, z) | x <-[-6..10], y <- [-6..10], z<-[-6..10]]
+
+
+point4All :: [Point4]
+point4All = [P4 (x, y, z, w) | x <-[-6..10], y <- [-6..10], z<-[-6..10], w<-[-6..10]]
+
+
+instance Coord Point4 where
+  neighbours (P4 (x, y, z, w))     = [P4 (x+m, y+n, z+o, w+k) | m <- [-1,0,1], n <- [-1,0,1], o <- [-1,0,1], k <- [-1,0,1], (m,n,o,k) /= (0,0,0,0)]
+  inbounds level (P4 (x, y, z, w)) = (level * 4) > abs x + abs y + abs z + abs w - 16
+  purify (P4 (a, b, c, d))         = P4 (a, b, abs c, abs d)
+  shouldPurify (P4 (_, _, a, d))   = a < 0 || d < 0
+  worth (P4 (_, _, a, b))
+    | a > 0 && b > 0 = 4
+    | a > 0 || b > 0 = 2
+    | otherwise      = 1
 
 
 getMin :: Ord a => [a] -> a
@@ -21,37 +59,23 @@ getMin [x] = x
 getMin (x:xs) = if' (x<min) x min
   where min = getMin xs
 
-gameOfLife :: Grid -> Integer -> Grid
-gameOfLife initial l p = memoFix go (l, p)
+
+get :: Coord a => M.Map a Cell -> a -> Cell
+get m a = M.findWithDefault Dead (purify a) m
+
+
+gameOfLife :: Coord a => [a] -> Grid a -> Int -> Grid a
+gameOfLife todo orig level = foldl step M.empty todo
   where
-    go _r (0, p)
-      = initial p
-    go r (n, p) = nextStep (r (n-1, p))
-                 (map (\x -> r (n-1, x)) (adjacents p))
+    aliveAround coord = count (==Alive) (map (get orig) (neighbours coord))
+    step m coord
+      | shouldPurify coord = m
+      | not (inbounds level coord) = m
+      -- Actually do something
+      | get orig coord == Alive && aliveAround coord == 2 = M.insert coord Alive m
+      | aliveAround coord == 3 = M.insert coord Alive m
+      | otherwise              = m
 
-    nextStep :: Cell -> [Cell] -> Cell
-    nextStep Alive adj
-      | count Alive adj == 2  = Alive  -- underpopulation
-      | count Alive adj == 3  = Alive  -- overpopulation
-      | otherwise             = Dead  -- live and let live
-    nextStep Dead adj
-      | count Alive adj == 3 = Alive  -- reproduction
-      | otherwise            = Dead  -- nothing happens
-
-    adjacents :: Point -> [Point]
-    adjacents [x,y,z,w]
-      = [[x+m, y+n, z+o, w+k] | m <- [-1,0,1], n <- [-1,0,1], o <- [-1,0,1], k <- [-1,0,1], (m,n,o,k) /= (0,0,0,0)]
-
-    count :: Eq a => a -> [a] -> Int
-    count x = length . filter (==x)
-
-toCell :: Char -> Cell
-toCell '.' = Dead
-toCell '#' = Alive
-
-fromCell :: Cell -> Char
-fromCell Alive = '#'
-fromCell Dead  = '.'
 
 enumerate :: [a] -> [(Int, a)]
 enumerate = enumerate' 0
@@ -60,38 +84,41 @@ enumerate = enumerate' 0
         enumerate' i (x:xs) = (i, x):enumerate' (i+1) xs
 
 
-parseGrid :: M.Map Point Cell -> (Int, String) -> M.Map Point Cell
+parseGrid :: [(Int, Int)] -> (Int, String) -> [(Int, Int)]
 parseGrid m (x, str) = foldl ins m (enumerate str)
-    where ins m (y, c) = M.insert [y, x, 0, 0] (toCell c) m
+    where
+      ins m (y, c)
+        | c == '#'  = (x, y):m
+        | otherwise = m
 
 
 dims :: ((Int, Int, Int), (Int, Int, Int))
 dims = ((-6, -6, -6), (10, 10, 10))
 
--- printGame :: Grid -> [[String]]
--- printGame grid = [[[fromCell (grid [x,y,z]) | x <-[mwidth..width]] | y <- [mheight..height]] | z<-[mdepth..depth]]
---     where ((mwidth, mheight, mdepth), (width, height, depth)) = dims
 
-countAlive :: Grid -> Int
-countAlive grid = length $ filter (\x -> grid x==Alive) [[x,y,z,w] | x <-[mwidth..width], y <- [mheight..height], z<-[mdepth..depth], w<-[mdepth..depth]]
-    where ((mwidth, mheight, mdepth), (width, height, depth)) = dims
+countAlive :: Coord a => Grid a -> Int
+countAlive grid = sum (map getWorth (M.assocs grid))
+  where
+    getWorth (c, _)    = worth c
 
-type Prep = Grid
+
+type Prep = [(Int, Int)]
 prepare :: String -> Prep
-prepare x = lookup (trace (show map) map)
-    where
-        map = foldl parseGrid M.empty (enumerate $ lines x)
-        lookup m x = M.findWithDefault Dead x m
+prepare x = foldl parseGrid [] (enumerate $ lines x)
 
 
 part1 :: Prep -> IO ()
-part1 x = putStr "Part 1: " >> print (countAlive s)
--- >> mapM_ (\x -> print "--------------------------------------------" >> mapM_ print x) (printGame s)
-    where s = gameOfLife x 6
+part1 x = putStr "Part 1: " >> print (countAlive (foldl step grid [1..6]))
+  where
+    step = gameOfLife point3All
+    grid = M.fromList (map (\(x,y) -> (P3 (x, y, 0), Alive)) x)
 
 
 part2 :: Prep -> IO ()
-part2 x = putStr "Part 2: "
+part2 x = putStr "Part 2: " >> print (countAlive (foldl step grid [1..6]))
+  where
+    step = gameOfLife point4All
+    grid = M.fromList (map (\(x,y) -> (P4 (x, y, 0, 0), Alive)) x)
 
 
 solve :: Maybe Int -> String -> IO ()
