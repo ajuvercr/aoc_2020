@@ -9,6 +9,7 @@ import Data.Maybe
 import qualified Data.List
 import Data.List.Ordered
 import qualified Data.Map.Strict as M
+import qualified Data.Set as S
 -- import Data.Set (Set, empty, union, fromList, filter, difference, fromAscList)
 import Control.Parallel.Strategies
 
@@ -47,17 +48,16 @@ toMaybe True a = Just a
 toMaybe False _ = Nothing
 
 
-pmap f xs = map f xs `using` parList rdeepseq
 
-
-sim :: Int -> [Coord] -> AdjF -> [Coord] -> [Coord]
-sim thresh all adj occ = catMaybes $ pmap getFilter all  -- ENH: Can this go parallel?
+sim :: Int -> [Coord] -> AdjF -> S.Set Coord -> S.Set Coord
+sim thresh all adj occ = foldl step S.empty all  -- ENH: Can this go parallel?
     where
-        isocc = has occ
-        getFilter x
-            | isocc x   = toMaybe (thresh > c x) x   -- Occ seat stays occ if thresh is bigger
-            | otherwise = toMaybe (0 ==     c x) x   -- Emtpy seat changes if no adj seats are in occ
-        c x = count isocc (adj x)
+        occupAround coord = count (`S.member` occ) (adj coord)
+        step m coord
+            | not member && occupAround coord == 0     = coord `S.insert` m -- empty seat
+            | member     && occupAround coord < thresh = coord `S.insert` m
+            | otherwise                                = m
+            where member = coord `S.member` occ
 
 
 run :: Eq a => (a -> a) -> a -> a
@@ -79,14 +79,14 @@ prepare :: String -> Prep
 prepare = getcoords . lines
 
 part1 :: Prep -> IO ()
-part1 coord = putStr "Part 1: " >> print (length $ run r coord)
+part1 coord = putStr "Part 1: " >> print (length $ run r S.empty)
     where
         m = buildAdj adjacent coord
         r = sim 4 coord (m M.!)
 
 
 part2 :: Prep -> IO ()
-part2 coord = putStr "Part 2: " >> print (length $ run r coord)
+part2 coord = putStr "Part 2: " >> print (length $ run r S.empty)
     where
         m = buildAdj (adjacent' coord) coord
         r = sim 5 coord (m M.!)
