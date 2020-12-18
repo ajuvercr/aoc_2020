@@ -136,6 +136,10 @@ reserved s = token $ string s
 spaces :: Parser String
 spaces = star $ oneOf " \n\r"
 
+-- |Parse whitespace both sides
+s2 :: Parser a -> Parser a
+s2 x = spaces *> x <* spaces
+
 
 -- |Parse one digit
 digit :: Parser Char
