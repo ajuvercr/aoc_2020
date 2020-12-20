@@ -7,6 +7,7 @@ import NanoParsec
 import Data.List
 import Debug.Trace
 import Control.Applicative
+import Data.Maybe
 
 data Tile = Tile
           { tile         :: Int
@@ -81,19 +82,15 @@ topLeft :: [String] -> (String, String)
 topLeft x = (head x, (head . transpose) x)
 
 
-rotateMatch :: (String -> Bool) -> (String -> Bool) -> [String] -> [String]
-rotateMatch t l s | Just x <- r1 <|> r2 <|> r3 <|> r4 <|> t1 <|> t2 <|> t3 <|> t4 = x
-    where
-        st = reverse s
-        r1 = let s' = iterate rotl s  !! 0; (top, left) = topLeft s'  in if' (t top && l left) (Just s') Nothing
-        r2 = let s' = iterate rotl s  !! 1; (top, left) = topLeft s'  in if' (t top && l left) (Just s') Nothing
-        r3 = let s' = iterate rotl s  !! 2; (top, left) = topLeft s'  in if' (t top && l left) (Just s') Nothing
-        r4 = let s' = iterate rotl s  !! 3; (top, left) = topLeft s'  in if' (t top && l left) (Just s') Nothing
+allDirs :: [[a]] -> [[[a]]]
+allDirs s = map (iterate rotl s  !!) [0..4] ++ map (iterate rotl s'  !!) [0..4]
+    where s' = transpose s
 
-        t1 = let s' = iterate rotl st !! 0; (top, left) = topLeft s'  in if' (t top && l left) (Just s') Nothing
-        t2 = let s' = iterate rotl st !! 1; (top, left) = topLeft s'  in if' (t top && l left) (Just s') Nothing
-        t3 = let s' = iterate rotl st !! 2; (top, left) = topLeft s'  in if' (t top && l left) (Just s') Nothing
-        t4 = let s' = iterate rotl st !! 3; (top, left) = topLeft s'  in if' (t top && l left) (Just s') Nothing
+
+rotateMatch :: (String -> Bool) -> (String -> Bool) -> [String] -> [String]
+rotateMatch t l s = firstJust good (allDirs s)
+    where
+        good s = let (top, left) = topLeft s in t top && l left
 
 
 rotateSqaures :: [String] -> Maybe String -> Maybe String -> Tile -> [String]
@@ -184,13 +181,14 @@ part1 x = putStr "Part 1: " >> print ((product . map tile) corners)
 
 
 part2 :: Prep -> IO ()
-part2 x = putStr "Part 2: " >> print (sum $ map (count (=='#')) snaked)
+part2 x = putStr "Part 2: " >> print c >> foldMap putStrLn (filterSnake snaked)
     where
         world = reverse $ map reverse (buildRealMap x)
         edges = concatMap sides x
         rotated = rotateMap edges world
-        consed = rotl $ rotl $ rotl $ consMap rotated
-        snaked = filterSnake consed
+        consed = consMap rotated
+        countSnake x = sum $ map (count (=='#')) $ filterSnake x
+        (c, snaked) = minimum (map (\x -> (countSnake x, x)) $ allDirs consed)
 
 
 solve :: Maybe Int -> String -> IO ()

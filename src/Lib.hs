@@ -48,3 +48,9 @@ printBefore f x = f $ (trace $ show x) x
 
 isqrt :: Int -> Int
 isqrt = floor . sqrt . fromIntegral
+
+
+firstJust :: (a -> Bool) -> [a] -> a
+firstJust f (x:xs)
+    | f x = x
+    | otherwise = firstJust f xs
