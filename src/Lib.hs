@@ -45,3 +45,6 @@ fromRight (Right x) = x
 
 printBefore :: Show a => (a -> b) -> a -> b
 printBefore f x = f $ (trace $ show x) x
+
+isqrt :: Int -> Int
+isqrt = floor . sqrt . fromIntegral
