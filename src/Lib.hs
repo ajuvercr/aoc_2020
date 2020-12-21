@@ -54,3 +54,6 @@ firstJust :: (a -> Bool) -> [a] -> a
 firstJust f (x:xs)
     | f x = x
     | otherwise = firstJust f xs
+
+unwrap :: Maybe a -> a
+unwrap (Just x) = x
