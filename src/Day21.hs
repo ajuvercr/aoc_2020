@@ -26,7 +26,6 @@ correctOrder used ((aleg, i:is):xs)
     | otherwise         = (((aleg, i):) <$> correctOrder (S.insert i used) xs) <|> correctOrder used ((aleg, is):xs)
 
 
-
 unsplit :: String -> [String] -> String
 unsplit _ [x] = x
 unsplit s (x:xs) = x ++ s ++ unsplit s xs
@@ -41,7 +40,6 @@ prepare s = (ing, map getFood' (S.toList total))
         total = foldl1 S.union (map snd x)
         getFood food = foldl1 S.intersection (map fst $ filter ((food `S.member`) . snd) x)
         getFood' x = (x, getFood x)
-        alegens = foldl1 S.union (map getFood (S.toList total))
 
 
 part1 :: Prep -> IO ()
@@ -55,6 +53,7 @@ part2 (ing, prod) = putStr "Part 2: " >> print (unsplit "," canonical)
     where
         dangerous = unwrap $ correctOrder S.empty (map (Data.Bifunctor.second S.toList) prod)
         canonical = map snd $ sort dangerous
+
 
 solve :: Maybe Int -> String -> IO ()
 solve (Just 1) x = part1 $ prepare x
