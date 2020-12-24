@@ -29,6 +29,7 @@ play1 (x:xs, y:ys)
     | x > y = play1 (xs ++ [x, y], ys)
     | y > x = play1 (xs,           ys ++ [y, x])
 
+
 -- True = Player 1 wins, False == Player 2 wins
 subGame :: ([Int], [Int]) -> Bool
 subGame x = snd $ play2 S.empty x
